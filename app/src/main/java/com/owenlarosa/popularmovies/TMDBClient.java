@@ -116,12 +116,27 @@ public class TMDBClient {
         }
     }
 
-    public Movie[] getPopularMovies() {
-        return null;
+    /*
+    Initiate a movie search task based on the method name.
+    Movies will be updated in the background when download is complete.
+     */
+    private void taskForMovieSearch(String method) {
+        FetchMovieTask fetchMovieTask = new FetchMovieTask();
+        fetchMovieTask.execute(method);
     }
 
-    public Movie[] getTopRatedMovies() {
-        return null;
+    /*
+    Initiate the download for movies that are "popular"
+     */
+    public void getPopularMovies() {
+        taskForMovieSearch("popular");
+    }
+
+    /*
+    Initiate the download for the "top rated" movies
+     */
+    public void getTopRatedMovies() {
+        taskForMovieSearch("top_rated");
     }
 
 }

@@ -3,12 +3,18 @@ package com.owenlarosa.popularmovies;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 /**
  * Created by owen on 6/24/16.
@@ -25,7 +31,7 @@ public class TMDBClient {
     public static final String KEY_RATING = "vote_average";
     public static final String KEY_OVERVIEW = "overview";
 
-    private class FetchMovieTask extends AsyncTask<String, Void, String> {
+    private class FetchMovieTask extends AsyncTask<String, Void, Movie[]> {
 
         private final String LOG_TAG = FetchMovieTask.class.getSimpleName();
 
@@ -39,8 +45,31 @@ public class TMDBClient {
                     .append("").toString();
         }
 
+        private Movie[] getMoviesFromJSON(String jsonString) {
+            Movie[] movies = {};
+            try {
+                JSONObject rootObject = new JSONObject(jsonString);
+                JSONArray results = rootObject.getJSONArray("results");
+                for (int i = 0; i < results.length(); i++) {
+                    Dictionary properties = new Hashtable();
+                    JSONObject movieData = (JSONObject) results.get(i);
+                    properties.put(KEY_ID, movieData.getInt(KEY_ID));
+                    properties.put(KEY_TITLE, movieData.getString(KEY_TITLE));
+                    properties.put(KEY_POSTER_PATH, movieData.getString(KEY_POSTER_PATH));
+                    properties.put(KEY_RELEASE_DATE, movieData.getString(KEY_RELEASE_DATE));
+                    properties.put(KEY_RATING, movieData.getInt(KEY_RATING));
+                    properties.put(KEY_OVERVIEW, movieData.getString(KEY_OVERVIEW));
+                    Movie movie = new Movie(properties);
+                    movies[i] = movie;
+                }
+            } catch (JSONException e) {
+                Log.e(LOG_TAG, "Error parsing JSON", e);
+            }
+            return movies;
+        }
+
         @Override
-        protected String doInBackground(String... params) {
+        protected Movie[] doInBackground(String... params) {
             // check to see if a method name was not supplied
             if (params.length == 0) return null;
 
@@ -82,7 +111,7 @@ public class TMDBClient {
                         Log.e(LOG_TAG, "Error closing stream: ", e);
                     }
                 }
-                return jsonString;
+                return getMoviesFromJSON(jsonString);
             }
         }
     }

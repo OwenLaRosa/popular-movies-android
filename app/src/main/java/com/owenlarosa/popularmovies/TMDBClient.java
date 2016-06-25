@@ -41,15 +41,18 @@ public class TMDBClient {
             // use a string builder because concatenated string is determined at runtime
             return new StringBuilder()
                     .append(BASE_URL)
+                    .append(method)
                     .append("?api_key=")
                     .append("").toString();
         }
 
         private Movie[] getMoviesFromJSON(String jsonString) {
-            Movie[] movies = {};
+            Movie[] movies;
             try {
                 JSONObject rootObject = new JSONObject(jsonString);
                 JSONArray results = rootObject.getJSONArray("results");
+                movies = new Movie[results.length()];
+
                 for (int i = 0; i < results.length(); i++) {
                     Dictionary properties = new Hashtable();
                     JSONObject movieData = (JSONObject) results.get(i);
@@ -57,13 +60,14 @@ public class TMDBClient {
                     properties.put(KEY_TITLE, movieData.getString(KEY_TITLE));
                     properties.put(KEY_POSTER_PATH, movieData.getString(KEY_POSTER_PATH));
                     properties.put(KEY_RELEASE_DATE, movieData.getString(KEY_RELEASE_DATE));
-                    properties.put(KEY_RATING, movieData.getInt(KEY_RATING));
+                    properties.put(KEY_RATING, movieData.getDouble(KEY_RATING));
                     properties.put(KEY_OVERVIEW, movieData.getString(KEY_OVERVIEW));
                     Movie movie = new Movie(properties);
                     movies[i] = movie;
                 }
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "Error parsing JSON", e);
+                return null;
             }
             return movies;
         }
@@ -112,6 +116,16 @@ public class TMDBClient {
                     }
                 }
                 return getMoviesFromJSON(jsonString);
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Movie[] movies) {
+            super.onPostExecute(movies);
+
+            Log.v(LOG_TAG, "ON POST EXECUTE");
+            for (int i = 0; i < movies.length; i++) {
+                Log.v(LOG_TAG, movies[i].title);
             }
         }
     }

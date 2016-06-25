@@ -15,6 +15,8 @@ import android.widget.Toast;
  */
 public class MovieActivityFragment extends Fragment {
 
+    TMDBClient client = new TMDBClient();
+
     public MovieActivityFragment() {
     }
 
@@ -35,6 +37,7 @@ public class MovieActivityFragment extends Fragment {
                 Toast.makeText(context, "This will launch the detail view.", Toast.LENGTH_SHORT);
             }
         });
+        client.getPopularMovies();
 
         return rootView;
     }

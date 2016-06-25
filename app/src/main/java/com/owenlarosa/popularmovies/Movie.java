@@ -15,7 +15,7 @@ public class Movie {
     public String title;
     public String poster_path;
     public String release_date;
-    public Integer rating;
+    public Double rating;
     public String overview;
 
     private static final String POSTER_BASE_PATH = "http://image.tmdb.org/t/p/";
@@ -26,7 +26,7 @@ public class Movie {
         title = (String) dictionary.get(TMDBClient.KEY_TITLE);
         poster_path = (String) dictionary.get(TMDBClient.KEY_POSTER_PATH);
         release_date = (String) dictionary.get(TMDBClient.KEY_RELEASE_DATE);
-        rating = (Integer) dictionary.get(TMDBClient.KEY_RATING);
+        rating = (Double) dictionary.get(TMDBClient.KEY_RATING);
         overview = (String) dictionary.get(TMDBClient.KEY_OVERVIEW);
     }
 

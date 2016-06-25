@@ -22,12 +22,12 @@ public class Movie {
     private static final String IMAGE_SIZE = "w185";
 
     public Movie(Dictionary<String, Object> dictionary) {
-        id = (Integer) dictionary.get("");
-        title = (String) dictionary.get("");
-        poster_path = (String) dictionary.get("");
-        release_date = (String) dictionary.get("");
-        rating = (Integer) dictionary.get("");
-        overview = (String) dictionary.get("");
+        id = (Integer) dictionary.get(TMDBClient.KEY_ID);
+        title = (String) dictionary.get(TMDBClient.KEY_TITLE);
+        poster_path = (String) dictionary.get(TMDBClient.KEY_POSTER_PATH);
+        release_date = (String) dictionary.get(TMDBClient.KEY_RELEASE_DATE);
+        rating = (Integer) dictionary.get(TMDBClient.KEY_RATING);
+        overview = (String) dictionary.get(TMDBClient.KEY_OVERVIEW);
     }
 
     /*

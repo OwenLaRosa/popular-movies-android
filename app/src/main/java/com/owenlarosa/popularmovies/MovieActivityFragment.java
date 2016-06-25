@@ -1,8 +1,10 @@
 package com.owenlarosa.popularmovies;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 public class MovieActivityFragment extends Fragment {
 
     TMDBClient client = new TMDBClient();
+    FetchMovieTask fetchMovieTask = new FetchMovieTask();
 
     public MovieActivityFragment() {
     }
@@ -37,8 +40,28 @@ public class MovieActivityFragment extends Fragment {
                 Toast.makeText(context, "This will launch the detail view.", Toast.LENGTH_SHORT);
             }
         });
-        client.getPopularMovies();
+        fetchMovieTask.execute("popular");
 
         return rootView;
     }
+
+    public class FetchMovieTask extends AsyncTask<String, Void, Movie[]> {
+
+        @Override
+        protected Movie[] doInBackground(String... params) {
+            String method = params[0];
+            if (params.length == 0) return null;
+            return client.taskForMovieSearch(method);
+        }
+
+        @Override
+        protected void onPostExecute(Movie[] movies) {
+            super.onPostExecute(movies);
+
+            for (int i = 0; i < movies.length; i++) {
+                Log.v("", movies[i].title);
+            }
+        }
+    }
+
 }

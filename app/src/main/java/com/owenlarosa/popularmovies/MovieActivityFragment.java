@@ -1,6 +1,5 @@
 package com.owenlarosa.popularmovies;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,6 +18,7 @@ public class MovieActivityFragment extends Fragment {
 
     TMDBClient client = new TMDBClient();
     FetchMovieTask fetchMovieTask = new FetchMovieTask();
+    MovieImageAdapter movieImageAdapter;
 
     public MovieActivityFragment() {
     }
@@ -27,17 +27,16 @@ public class MovieActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
-        final Context context = getContext();
 
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
-        ImageAdapter imageAdapter = new ImageAdapter(context);
-        gridView.setAdapter(imageAdapter);
+        movieImageAdapter = new MovieImageAdapter(getContext(), R.layout.movie_grid_item);
+        gridView.setAdapter(movieImageAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // TODO: display the detail view.
                 // for now, just display a toast
-                Toast.makeText(context, "This will launch the detail view.", Toast.LENGTH_SHORT);
+                Toast.makeText(getContext(), "This will launch the detail view.", Toast.LENGTH_SHORT);
             }
         });
         fetchMovieTask.execute("popular");
@@ -59,8 +58,12 @@ public class MovieActivityFragment extends Fragment {
             super.onPostExecute(movies);
 
             for (int i = 0; i < movies.length; i++) {
-                Log.v("", movies[i].title);
+                Log.d("", movies[i].title);
             }
+
+            // refresh the grid with the new data
+            movieImageAdapter.clear();
+            movieImageAdapter.addAll(movies);
         }
     }
 

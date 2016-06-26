@@ -34,7 +34,7 @@ public class Movie {
     Returns the full path of the movie's poster
      */
     public String getFullPosterPath() {
-        return new StringBuilder(POSTER_BASE_PATH + "/" + IMAGE_SIZE + "/")
+        return new StringBuilder(POSTER_BASE_PATH + IMAGE_SIZE + "/")
                 .append(poster_path).toString();
     }
 

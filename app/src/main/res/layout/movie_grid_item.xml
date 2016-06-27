@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -11,10 +11,15 @@
         android:layout_margin="0dp"
         android:scaleType="centerCrop" />
     
-    <!-- <TextView
+    <TextView
         android:id="@+id/grid_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"/> -->
+        android:layout_alignLeft="@id/grid_image_view"
+        android:layout_alignBottom="@id/grid_image_view"
+        android:paddingLeft="8dp"
+        android:paddingBottom="8dp"
+        android:gravity="left"
+        android:textColor="@android:color/white"/>
 
-</FrameLayout>
+</RelativeLayout>

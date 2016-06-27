@@ -68,14 +68,14 @@ public class MovieImageAdapter extends BaseAdapter {
             cell = inflater.inflate(layoutId, parent, false);
             holder = new ViewHolder();
             holder.imageView = (ImageView) cell.findViewById(R.id.grid_image_view);
-            //holder.textView = (TextView) cell.findViewById(R.id.grid_text_view);
+            holder.textView = (TextView) cell.findViewById(R.id.grid_text_view);
             cell.setTag(holder);
         } else {
             Log.d("", "cell != null");
             holder = (ViewHolder) cell.getTag();
         }
         Picasso.with(mContext).load(movies.get(position).getFullPosterPath()).into(holder.imageView);
-        //holder.textView.setText(movies.get(position).title);
+        holder.textView.setText(movies.get(position).title);
         return cell;
     }
 

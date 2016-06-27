@@ -3,12 +3,15 @@ package com.owenlarosa.popularmovies;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 /**
@@ -20,6 +23,15 @@ public class MovieActivityFragment extends Fragment {
     FetchMovieTask fetchMovieTask = new FetchMovieTask();
     MovieImageAdapter movieImageAdapter;
 
+    DrawerLayout drawerLayout;
+    ListView drawerList;
+    String[] movieCategories = {
+            "Favorites",
+            "Popular",
+            "Top Rated"
+    };
+    ArrayAdapter<String> drawerListAdapter;
+
     public MovieActivityFragment() {
     }
 
@@ -27,6 +39,24 @@ public class MovieActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
+
+        drawerLayout = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
+
+        drawerList = (ListView) rootView.findViewById(R.id.left_drawer);
+
+        drawerListAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                R.layout.drawer_list_item,
+                R.id.drawer_list_item_textview,
+                movieCategories
+        );
+        drawerList.setAdapter(drawerListAdapter);
+        drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("", drawerListAdapter.getItem(position));
+            }
+        });
 
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
         movieImageAdapter = new MovieImageAdapter(getContext(), R.layout.movie_grid_item);

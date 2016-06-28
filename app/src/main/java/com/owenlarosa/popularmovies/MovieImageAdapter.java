@@ -41,8 +41,8 @@ public class MovieImageAdapter extends BaseAdapter {
         return movies.size();
     }
 
-    public Object getItem(int position) {
-        return null;
+    public Movie getItem(int position) {
+        return movies.get(position);
     }
 
     public long getItemId(int position) {

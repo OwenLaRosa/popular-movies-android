@@ -1,5 +1,6 @@
 package com.owenlarosa.popularmovies;
 
+import java.io.Serializable;
 import java.util.Dictionary;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Dictionary;
 /**
  * Abstract representation for Movie data returned from TMDB
  */
-public class Movie {
+public class Movie implements Serializable {
 
     public Integer id;
     public String title;

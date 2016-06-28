@@ -1,5 +1,6 @@
 package com.owenlarosa.popularmovies;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -99,7 +99,12 @@ public class MovieActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // TODO: display the detail view.
                 // for now, just display a toast
-                Toast.makeText(getContext(), "This will launch the detail view.", Toast.LENGTH_SHORT);
+                //Toast.makeText(getContext(), "This will launch the detail view.", Toast.LENGTH_SHORT);
+
+                Movie movie = (Movie) movieImageAdapter.getItem(position);
+                Intent detailIntent = new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(Movie.class.getSimpleName(), movie);
+                startActivity(detailIntent);
             }
         });
         fetchMovieTask.execute("movie/popular");

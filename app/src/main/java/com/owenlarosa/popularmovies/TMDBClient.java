@@ -30,20 +30,21 @@ public class TMDBClient {
     public static final String KEY_RATING = "vote_average";
     public static final String KEY_OVERVIEW = "overview";
 
-    private static final String BASE_URL = "http://api.themoviedb.org/3/movie/";
+    private static final String BASE_URL = "http://api.themoviedb.org/3/";
 
     /**
      * Build a URL to be used with The Movie Database
      * @param method API method to be included in the URL
      * @return The complete URL
      */
-    private String buildURL(String method) {
+    private String buildURL(String method, String parameters) {
         // use a string builder because concatenated string is determined at runtime
         return new StringBuilder()
                 .append(BASE_URL)
                 .append(method)
                 .append("?api_key=")
-                .append("").toString();
+                .append("")
+                .append(parameters).toString();
     }
 
     /**
@@ -82,14 +83,15 @@ public class TMDBClient {
      * @param method The API method to be used in the base URL
      * @return: Search results as Movie objects
      */
-    public Movie[] taskForMovieSearch(String method) {
+    public Movie[] taskForMovieSearch(String method, String parameters) {
         HttpURLConnection urlConnection = null;
         BufferedReader bufferedReader = null;
         String jsonString = null;
 
         try {
             // connect to the server
-            URL url = new URL(buildURL(method));
+            URL url = new URL(buildURL(method, parameters));
+            Log.d(LOG_TAG, url.toString());
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();

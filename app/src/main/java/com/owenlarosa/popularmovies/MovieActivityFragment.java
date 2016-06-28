@@ -16,6 +16,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -27,11 +30,36 @@ public class MovieActivityFragment extends Fragment {
 
     DrawerLayout drawerLayout;
     ListView drawerList;
-    String[] movieCategories = {
-            "Favorites",
-            "Popular",
-            "Top Rated"
-    };
+
+    private static final LinkedHashMap<String, String> movieCategories;
+    static {
+        // use static initializer as Java has no dictionary literals
+        movieCategories = new LinkedHashMap<String, String>();
+        movieCategories.put("Favorites", ""); // no data needed for API call
+        movieCategories.put("Popular", "popular");
+        movieCategories.put("Top Rated", "top_rated");
+        movieCategories.put("Action", "28");
+        movieCategories.put("Adventure", "12");
+        movieCategories.put("Animation", "16");
+        movieCategories.put("Comedy", "35");
+        movieCategories.put("Crime", "80");
+        movieCategories.put("Documentary", "99");
+        movieCategories.put("Drama", "18");
+        movieCategories.put("Family", "10751");
+        movieCategories.put("Fantasy", "14");
+        movieCategories.put("Foreign", "10769");
+        movieCategories.put("Mystery", "36");
+        movieCategories.put("Horror", "27");
+        movieCategories.put("Music", "10402");
+        movieCategories.put("Mystery", "9648");
+        movieCategories.put("Romance", "10749");
+        movieCategories.put("Science Fiction", "878");
+        movieCategories.put("TV Movie", "10770");
+        movieCategories.put("Thriller", "53");
+        movieCategories.put("War", "10752");
+        movieCategories.put("Western", "37");
+    }
+
     ArrayAdapter<String> drawerListAdapter;
 
     public MovieActivityFragment() {
@@ -50,7 +78,7 @@ public class MovieActivityFragment extends Fragment {
                 getActivity(),
                 R.layout.drawer_list_item,
                 R.id.drawer_list_item_textview,
-                movieCategories
+                new ArrayList(movieCategories.keySet())
         );
         drawerList.setAdapter(drawerListAdapter);
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,7 +102,7 @@ public class MovieActivityFragment extends Fragment {
                 Toast.makeText(getContext(), "This will launch the detail view.", Toast.LENGTH_SHORT);
             }
         });
-        fetchMovieTask.execute("popular");
+        fetchMovieTask.execute("movie/popular");
 
         return rootView;
     }
@@ -84,8 +112,10 @@ public class MovieActivityFragment extends Fragment {
         @Override
         protected Movie[] doInBackground(String... params) {
             String method = params[0];
+            String parameters = "";
+            if (params.length > 1) parameters = params[1];
             if (params.length == 0) return null;
-            return client.taskForMovieSearch(method);
+            return client.taskForMovieSearch(method, parameters);
         }
 
         @Override
@@ -109,9 +139,11 @@ public class MovieActivityFragment extends Fragment {
         }
         FetchMovieTask fetchMovieTask = new FetchMovieTask();
         if (category == "Popular") {
-            fetchMovieTask.execute("popular");
+            fetchMovieTask.execute("movie/popular");
         } else if (category == "Top Rated") {
-            fetchMovieTask.execute("top_rated");
+            fetchMovieTask.execute("movie/top_rated");
+        } else {
+            fetchMovieTask.execute("discover/movie", "&with_genres=" + movieCategories.get(category));
         }
     }
 

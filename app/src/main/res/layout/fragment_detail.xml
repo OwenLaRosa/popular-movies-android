@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    tools:context="com.owenlarosa.popularmovies.DetailActivityFragment">
+
+    <TextView
+        android:id="@+id/title_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Movie Title"
+        android:textSize="35sp"
+        android:textColor="@android:color/white"
+        android:background="@android:color/holo_green_dark"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        android:paddingLeft="16dp"/>
+
+    <ImageView
+        android:id="@+id/poster_image_view"
+        android:background="@android:color/black"
+        android:layout_width="100dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/title_text_view"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/details_linear_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:layout_toRightOf="@id/poster_image_view"
+        android:layout_below="@id/title_text_view"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="48dp">
+
+        <TextView
+            android:id="@+id/year_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2016"
+            android:textSize="30sp"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/rating_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10/10"
+            android:textSize="30sp"
+            android:layout_marginBottom="8dp"/>
+        
+        <Button
+            android:id="@+id/mark_favorite_button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="mark as favorite"
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_green_dark" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/overview_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="lorem ipsum dolor sit amet"
+        android:textSize="20sp"
+        android:layout_below="@id/poster_image_view"
+        android:layout_margin="16dp"/>
+
+</RelativeLayout>

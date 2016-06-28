@@ -36,8 +36,8 @@ public class MovieActivityFragment extends Fragment {
         // use static initializer as Java has no dictionary literals
         movieCategories = new LinkedHashMap<String, String>();
         movieCategories.put("Favorites", ""); // no data needed for API call
-        movieCategories.put("Popular", "popular");
-        movieCategories.put("Top Rated", "top_rated");
+        movieCategories.put("Popular", "movie/popular");
+        movieCategories.put("Top Rated", "movie/top_rated");
         movieCategories.put("Action", "28");
         movieCategories.put("Adventure", "12");
         movieCategories.put("Animation", "16");
@@ -139,9 +139,9 @@ public class MovieActivityFragment extends Fragment {
         }
         FetchMovieTask fetchMovieTask = new FetchMovieTask();
         if (category == "Popular") {
-            fetchMovieTask.execute("movie/popular");
+            fetchMovieTask.execute(movieCategories.get(category));
         } else if (category == "Top Rated") {
-            fetchMovieTask.execute("movie/top_rated");
+            fetchMovieTask.execute(movieCategories.get(category));
         } else {
             fetchMovieTask.execute("discover/movie", "&with_genres=" + movieCategories.get(category));
         }

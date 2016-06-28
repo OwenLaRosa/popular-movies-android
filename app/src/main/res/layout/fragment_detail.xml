@@ -21,12 +21,12 @@
     <ImageView
         android:id="@+id/poster_image_view"
         android:background="@android:color/black"
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="200dp"
+        android:scaleType="centerCrop"
         android:layout_below="@id/title_text_view"
         android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        />
+        android:layout_marginLeft="16dp" />
 
     <LinearLayout
         android:id="@+id/details_linear_layout"

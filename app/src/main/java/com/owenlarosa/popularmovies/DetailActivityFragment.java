@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -30,7 +32,7 @@ public class DetailActivityFragment extends Fragment {
         TextView titleTextView = (TextView) rootView.findViewById(R.id.title_text_view);
         titleTextView.setText(movie.title);
         ImageView posterImageView = (ImageView) rootView.findViewById(R.id.poster_image_view);
-
+        Picasso.with(getContext()).load(movie.getFullPosterPath()).into(posterImageView);
         TextView yearTextView = (TextView) rootView.findViewById(R.id.year_text_view);
         yearTextView.setText(movie.release_date);
         TextView ratingTextView = (TextView) rootView.findViewById(R.id.rating_text_view);

@@ -3,6 +3,7 @@ package com.owenlarosa.popularmovies;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -54,7 +56,10 @@ public class MovieActivityFragment extends Fragment {
         drawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("", drawerListAdapter.getItem(position));
+                // update the movie list based on the selection
+                updateMovieList(((TextView) view.findViewById(R.id.drawer_list_item_textview)).getText().toString());
+                // dismiss the drawer: http://stackoverflow.com/questions/26833741/hide-navigation-drawer-when-user-presses-back-button
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
         });
 
@@ -94,6 +99,19 @@ public class MovieActivityFragment extends Fragment {
             // refresh the grid with the new data
             movieImageAdapter.clear();
             movieImageAdapter.addAll(movies);
+        }
+    }
+
+    private void updateMovieList(String category) {
+        if (category == "Favorites") {
+            // TODO: show favorite movies
+            return;
+        }
+        FetchMovieTask fetchMovieTask = new FetchMovieTask();
+        if (category == "Popular") {
+            fetchMovieTask.execute("popular");
+        } else if (category == "Top Rated") {
+            fetchMovieTask.execute("top_rated");
         }
     }
 

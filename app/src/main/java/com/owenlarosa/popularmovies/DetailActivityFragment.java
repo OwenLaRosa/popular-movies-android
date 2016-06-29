@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
  */
 public class DetailActivityFragment extends Fragment {
 
-   private Movie movie;
+    private Movie movie;
 
     public DetailActivityFragment() {
     }
@@ -36,9 +36,26 @@ public class DetailActivityFragment extends Fragment {
         TextView yearTextView = (TextView) rootView.findViewById(R.id.year_text_view);
         yearTextView.setText(movie.release_date);
         TextView ratingTextView = (TextView) rootView.findViewById(R.id.rating_text_view);
-        ratingTextView.setText(movie.rating.toString());
+        ratingTextView.setText("★ " + movie.rating.toString() + "/10");
+
+        int colorId;
+        // change rating color based on value
+        if (movie.rating < 2.5) {
+            colorId = R.color.rating_bad;
+        } else if (movie.rating < 5.0) {
+            colorId = R.color.rating_alright;
+        } else if (movie.rating <= 7.5) {
+            colorId = R.color.rating_good;
+        } else {
+            colorId = R.color.rating_great;
+        }
+        ratingTextView.setTextColor(getResources().getColor(colorId));
+
         TextView overviewTextView = (TextView) rootView.findViewById(R.id.overview_text_view);
         overviewTextView.setText(movie.overview);
+
+        // set the title
+        getActivity().setTitle("Movie Details");
 
         return rootView;
     }

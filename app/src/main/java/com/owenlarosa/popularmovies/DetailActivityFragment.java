@@ -3,9 +3,11 @@ package com.owenlarosa.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +54,16 @@ public class DetailActivityFragment extends Fragment {
         }
         ratingTextView.setTextColor(getResources().getColor(colorId));
 
+        Button favoritesButton = (Button) rootView.findViewById(R.id.mark_favorite_button);
+        favoritesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: add/remove the item from the favorites list
+                Log.d("", "onClickView");
+                Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         TextView overviewTextView = (TextView) rootView.findViewById(R.id.overview_text_view);
         overviewTextView.setText(movie.overview);
 
@@ -59,15 +71,6 @@ public class DetailActivityFragment extends Fragment {
         getActivity().setTitle("Movie Details");
 
         return rootView;
-    }
-
-    /*
-    Add or remove the movie from the favorites list
-     */
-    public void toggleFavorite(View view) {
-        // TODO: add/remove the item from the favorites list
-
-        Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT);
     }
 
 }

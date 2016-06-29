@@ -59,7 +59,6 @@
             android:text="mark as favorite"
             android:textColor="@android:color/white"
             android:background="@color/accent"
-            android:onClick="toggleFavorite"
             android:layout_below="@id/rating_text_view"
             android:layout_toRightOf="@id/poster_image_view" />
 

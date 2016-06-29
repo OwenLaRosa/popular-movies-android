@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -140,6 +141,7 @@ public class MovieActivityFragment extends Fragment {
     private void updateMovieList(String category) {
         if (category == "Favorites") {
             // TODO: show favorite movies
+            Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
             return;
         }
         FetchMovieTask fetchMovieTask = new FetchMovieTask();

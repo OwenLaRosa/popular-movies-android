@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -59,4 +60,14 @@ public class DetailActivityFragment extends Fragment {
 
         return rootView;
     }
+
+    /*
+    Add or remove the movie from the favorites list
+     */
+    public void toggleFavorite(View view) {
+        // TODO: add/remove the item from the favorites list
+
+        Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT);
+    }
+
 }

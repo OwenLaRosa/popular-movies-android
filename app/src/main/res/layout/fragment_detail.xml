@@ -15,7 +15,7 @@
             android:text="Movie Title"
             android:textSize="35sp"
             android:textColor="@android:color/white"
-            android:background="@android:color/holo_green_dark"
+            android:background="@color/accent"
             android:paddingTop="24dp"
             android:paddingBottom="24dp"
             android:paddingLeft="16dp"/>
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:text="mark as favorite"
                 android:textColor="@android:color/white"
-                android:background="@android:color/holo_green_dark" />
+                android:background="@color/accent" />
         </LinearLayout>
 
         <TextView

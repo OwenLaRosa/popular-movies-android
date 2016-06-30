@@ -32,6 +32,9 @@ public class MovieActivityFragment extends Fragment {
     DrawerLayout drawerLayout;
     ListView drawerList;
 
+    // key to be used when saving restoring the instance
+    private static final String MOVIES_KEY = "movies";
+
     private static final LinkedHashMap<String, String> movieCategories;
     static {
         // use static initializer as Java has no dictionary literals
@@ -64,6 +67,12 @@ public class MovieActivityFragment extends Fragment {
     ArrayAdapter<String> drawerListAdapter;
 
     public MovieActivityFragment() {
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(MOVIES_KEY, mMovieImageAdapter.movies);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -108,7 +117,12 @@ public class MovieActivityFragment extends Fragment {
                 startActivity(detailIntent);
             }
         });
-        fetchMovieTask.execute("movie/popular");
+
+        if (savedInstanceState == null || !savedInstanceState.containsKey(MOVIES_KEY)) {
+            fetchMovieTask.execute("movie/popular");
+        } else {
+            mMovieImageAdapter.movies = savedInstanceState.getParcelableArrayList("movies");
+        }
 
         return rootView;
     }

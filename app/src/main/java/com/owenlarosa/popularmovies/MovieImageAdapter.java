@@ -30,7 +30,13 @@ public class MovieImageAdapter extends BaseAdapter {
 
     private int layoutId;
 
-    private ArrayList<Movie> movies = new ArrayList<Movie>();
+    public ArrayList<Movie> movies = new ArrayList<Movie>();
+
+    public void setMovies(ArrayList<Movie> movies) {
+        this.movies = movies;
+        // when movies are assigned, inform that data has been updated
+        notifyDataSetChanged();
+    }
 
     public MovieImageAdapter(Context c, int layoutId) {
         mContext = c;

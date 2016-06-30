@@ -30,7 +30,7 @@ public class DetailActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
         Intent intent = getActivity().getIntent();
-        movie = (Movie) intent.getSerializableExtra(Movie.class.getSimpleName());
+        movie = (Movie) intent.getParcelableExtra(Movie.class.getSimpleName());
 
         TextView titleTextView = (TextView) rootView.findViewById(R.id.title_text_view);
         titleTextView.setText(movie.title);

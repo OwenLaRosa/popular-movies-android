@@ -1,6 +1,8 @@
 package com.owenlarosa.popularmovies;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Dictionary;
 
 /**
@@ -10,7 +12,7 @@ import java.util.Dictionary;
 /**
  * Abstract representation for Movie data returned from TMDB
  */
-public class Movie implements Serializable {
+public class Movie implements Parcelable {
 
     public Integer id;
     public String title;
@@ -38,5 +40,44 @@ public class Movie implements Serializable {
         return new StringBuilder(POSTER_BASE_PATH + IMAGE_SIZE + "/")
                 .append(poster_path).toString();
     }
+
+    // Parcelable
+
+    private Movie(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        poster_path = in.readString();
+        release_date = in.readString();
+        rating = in.readDouble();
+        overview = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(poster_path);
+        dest.writeString(release_date);
+        dest.writeDouble(rating);
+        dest.writeString(overview);
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
 }

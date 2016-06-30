@@ -28,13 +28,13 @@ public class MovieImageAdapter extends BaseAdapter {
 
     private Context mContext;
 
-    private int layoutId;
+    private int mLayoutId;
 
     private ArrayList<Movie> movies = new ArrayList<Movie>();
 
     public MovieImageAdapter(Context c, int layoutId) {
         mContext = c;
-        this.layoutId = layoutId;
+        this.mLayoutId = layoutId;
     }
 
     public int getCount() {
@@ -65,7 +65,7 @@ public class MovieImageAdapter extends BaseAdapter {
         if (cell == null) {
             Log.d("", "cell == null");
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
-            cell = inflater.inflate(layoutId, parent, false);
+            cell = inflater.inflate(mLayoutId, parent, false);
             holder = new ViewHolder();
             holder.imageView = (ImageView) cell.findViewById(R.id.grid_image_view);
             holder.textView = (TextView) cell.findViewById(R.id.grid_text_view);

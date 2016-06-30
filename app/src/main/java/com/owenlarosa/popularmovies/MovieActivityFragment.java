@@ -27,7 +27,7 @@ public class MovieActivityFragment extends Fragment {
 
     TMDBClient client = new TMDBClient();
     FetchMovieTask fetchMovieTask = new FetchMovieTask();
-    MovieImageAdapter movieImageAdapter;
+    MovieImageAdapter mMovieImageAdapter;
 
     DrawerLayout drawerLayout;
     ListView drawerList;
@@ -93,8 +93,8 @@ public class MovieActivityFragment extends Fragment {
         });
 
         GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
-        movieImageAdapter = new MovieImageAdapter(getContext(), R.layout.movie_grid_item);
-        gridView.setAdapter(movieImageAdapter);
+        mMovieImageAdapter = new MovieImageAdapter(getContext(), R.layout.movie_grid_item);
+        gridView.setAdapter(mMovieImageAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -102,7 +102,7 @@ public class MovieActivityFragment extends Fragment {
                 // for now, just display a toast
                 //Toast.makeText(getContext(), "This will launch the detail view.", Toast.LENGTH_SHORT);
 
-                Movie movie = (Movie) movieImageAdapter.getItem(position);
+                Movie movie = (Movie) mMovieImageAdapter.getItem(position);
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class)
                         .putExtra(Movie.class.getSimpleName(), movie);
                 startActivity(detailIntent);
@@ -133,8 +133,8 @@ public class MovieActivityFragment extends Fragment {
             }
 
             // refresh the grid with the new data
-            movieImageAdapter.clear();
-            movieImageAdapter.addAll(movies);
+            mMovieImageAdapter.clear();
+            mMovieImageAdapter.addAll(movies);
         }
     }
 

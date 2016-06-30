@@ -37,7 +37,9 @@ public class DetailActivityFragment extends Fragment {
         ImageView posterImageView = (ImageView) rootView.findViewById(R.id.poster_image_view);
         Picasso.with(getContext()).load(movie.getFullPosterPath()).into(posterImageView);
         TextView yearTextView = (TextView) rootView.findViewById(R.id.year_text_view);
-        yearTextView.setText(movie.release_date);
+        // get the release year, should be the first 4 characters
+        String releaseYear = movie.release_date.substring(0, 4);
+        yearTextView.setText(releaseYear);
         TextView ratingTextView = (TextView) rootView.findViewById(R.id.rating_text_view);
         ratingTextView.setText("★ " + movie.rating.toString() + "/10");
 

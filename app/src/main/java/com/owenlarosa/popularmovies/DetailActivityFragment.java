@@ -3,7 +3,6 @@ package com.owenlarosa.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +60,6 @@ public class DetailActivityFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // TODO: add/remove the item from the favorites list
-                Log.d("", "onClickView");
                 Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
             }
         });

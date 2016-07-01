@@ -91,7 +91,6 @@ public class TMDBClient {
         try {
             // connect to the server
             URL url = new URL(buildURL(method, parameters));
-            Log.d(LOG_TAG, url.toString());
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();

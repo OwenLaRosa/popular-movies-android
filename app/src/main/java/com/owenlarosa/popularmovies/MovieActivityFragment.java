@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,10 +140,6 @@ public class MovieActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(Movie[] movies) {
             super.onPostExecute(movies);
-
-            for (int i = 0; i < movies.length; i++) {
-                Log.d("", movies[i].title);
-            }
 
             // refresh the grid with the new data
             mMovieImageAdapter.clear();

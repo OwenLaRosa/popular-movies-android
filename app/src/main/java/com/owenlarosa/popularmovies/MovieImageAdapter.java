@@ -2,7 +2,6 @@ package com.owenlarosa.popularmovies;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +68,6 @@ public class MovieImageAdapter extends BaseAdapter {
         View cell = convertView;
         ViewHolder holder = null;
         if (cell == null) {
-            Log.d("", "cell == null");
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             cell = inflater.inflate(layoutId, parent, false);
             holder = new ViewHolder();
@@ -77,7 +75,6 @@ public class MovieImageAdapter extends BaseAdapter {
             holder.textView = (TextView) cell.findViewById(R.id.grid_text_view);
             cell.setTag(holder);
         } else {
-            Log.d("", "cell != null");
             holder = (ViewHolder) cell.getTag();
         }
         Picasso.with(mContext).load(movies.get(position).getFullPosterPath()).into(holder.imageView);

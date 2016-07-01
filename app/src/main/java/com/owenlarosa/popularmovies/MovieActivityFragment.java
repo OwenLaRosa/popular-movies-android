@@ -24,7 +24,7 @@ import java.util.LinkedHashMap;
  */
 public class MovieActivityFragment extends Fragment {
 
-    TMDBClient client = new TMDBClient();
+    TMDBClient client;
     FetchMovieTask fetchMovieTask = new FetchMovieTask();
     MovieImageAdapter mMovieImageAdapter;
 
@@ -78,6 +78,8 @@ public class MovieActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
+
+        client = new TMDBClient(getContext());
 
         drawerLayout = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
 

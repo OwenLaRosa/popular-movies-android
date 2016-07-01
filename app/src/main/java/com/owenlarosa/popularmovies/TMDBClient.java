@@ -1,5 +1,6 @@
 package com.owenlarosa.popularmovies;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -32,6 +33,12 @@ public class TMDBClient {
 
     private static final String BASE_URL = "http://api.themoviedb.org/3/";
 
+    private Context mContext;
+
+    TMDBClient(Context c) {
+        mContext = c;
+    }
+
     /**
      * Build a URL to be used with The Movie Database
      * @param method API method to be included in the URL
@@ -43,7 +50,7 @@ public class TMDBClient {
                 .append(BASE_URL)
                 .append(method)
                 .append("?api_key=")
-                .append("")
+                .append(getApiKey())
                 .append(parameters).toString();
     }
 
@@ -120,6 +127,10 @@ public class TMDBClient {
             }
             return getMoviesFromJSON(jsonString);
         }
+    }
+
+    private String getApiKey() {
+        return mContext.getResources().getString(R.string.tmdb_api_key);
     }
 
 }

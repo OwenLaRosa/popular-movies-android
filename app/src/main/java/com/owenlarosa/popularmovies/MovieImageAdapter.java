@@ -14,6 +14,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Owen LaRosa on 6/24/16.
  */
@@ -70,9 +73,7 @@ public class MovieImageAdapter extends BaseAdapter {
         if (cell == null) {
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
             cell = inflater.inflate(layoutId, parent, false);
-            holder = new ViewHolder();
-            holder.imageView = (ImageView) cell.findViewById(R.id.grid_image_view);
-            holder.textView = (TextView) cell.findViewById(R.id.grid_text_view);
+            holder = new ViewHolder(cell);
             cell.setTag(holder);
         } else {
             holder = (ViewHolder) cell.getTag();
@@ -83,8 +84,13 @@ public class MovieImageAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        ImageView imageView;
-        TextView textView;
+        @BindView(R.id.grid_image_view) ImageView imageView;
+        @BindView(R.id.grid_text_view) TextView textView;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
     }
 
 }

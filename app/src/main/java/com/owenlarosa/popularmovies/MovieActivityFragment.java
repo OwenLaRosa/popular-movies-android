@@ -19,6 +19,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -28,8 +32,11 @@ public class MovieActivityFragment extends Fragment {
     FetchMovieTask fetchMovieTask = new FetchMovieTask();
     MovieImageAdapter mMovieImageAdapter;
 
-    DrawerLayout drawerLayout;
-    ListView drawerList;
+    @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
+    @BindView(R.id.left_drawer) ListView drawerList;
+    @BindView(R.id.gridview) GridView gridView;
+
+    private Unbinder unbinder;
 
     // key to be used when saving restoring the instance
     private static final String MOVIES_KEY = "movies";
@@ -78,12 +85,9 @@ public class MovieActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie, container, false);
+        unbinder = ButterKnife.bind(this, rootView);
 
         client = new TMDBClient(getContext());
-
-        drawerLayout = (DrawerLayout) rootView.findViewById(R.id.drawer_layout);
-
-        drawerList = (ListView) rootView.findViewById(R.id.left_drawer);
 
         drawerListAdapter = new ArrayAdapter<String>(
                 getActivity(),
@@ -102,7 +106,6 @@ public class MovieActivityFragment extends Fragment {
             }
         });
 
-        GridView gridView = (GridView) rootView.findViewById(R.id.gridview);
         mMovieImageAdapter = new MovieImageAdapter(getContext(), R.layout.movie_grid_item);
         gridView.setAdapter(mMovieImageAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -126,6 +129,12 @@ public class MovieActivityFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
     }
 
     public class FetchMovieTask extends AsyncTask<String, Void, Movie[]> {

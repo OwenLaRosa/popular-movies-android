@@ -6,17 +6,28 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
+
 /**
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment {
+
+    @BindView(R.id.title_text_view) TextView titleTextView;
+    @BindView(R.id.poster_image_view) ImageView posterImageView;
+    @BindView(R.id.year_text_view) TextView yearTextView;
+    @BindView(R.id.rating_text_view) TextView ratingTextView;
+
+    private Unbinder unbinder;
 
     private Movie movie;
 
@@ -27,19 +38,16 @@ public class DetailActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+        unbinder = ButterKnife.bind(this, rootView);
 
         Intent intent = getActivity().getIntent();
         movie = (Movie) intent.getParcelableExtra(Movie.class.getSimpleName());
 
-        TextView titleTextView = (TextView) rootView.findViewById(R.id.title_text_view);
         titleTextView.setText(movie.title);
-        ImageView posterImageView = (ImageView) rootView.findViewById(R.id.poster_image_view);
         Picasso.with(getContext()).load(movie.getFullPosterPath()).into(posterImageView);
-        TextView yearTextView = (TextView) rootView.findViewById(R.id.year_text_view);
         // get the release year, should be the first 4 characters
         String releaseYear = movie.release_date.substring(0, 4);
         yearTextView.setText(releaseYear);
-        TextView ratingTextView = (TextView) rootView.findViewById(R.id.rating_text_view);
         ratingTextView.setText("★ " + movie.rating.toString() + "/10");
 
         int colorId;
@@ -55,15 +63,6 @@ public class DetailActivityFragment extends Fragment {
         }
         ratingTextView.setTextColor(getResources().getColor(colorId));
 
-        Button favoritesButton = (Button) rootView.findViewById(R.id.mark_favorite_button);
-        favoritesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: add/remove the item from the favorites list
-                Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         TextView overviewTextView = (TextView) rootView.findViewById(R.id.overview_text_view);
         overviewTextView.setText(movie.overview);
 
@@ -71,6 +70,16 @@ public class DetailActivityFragment extends Fragment {
         getActivity().setTitle("Movie Details");
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unbinder.unbind();
+    }
+
+    @OnClick(R.id.mark_favorite_button) void favoriteButtonTapped() {
+        Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
     }
 
 }

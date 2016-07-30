@@ -71,6 +71,32 @@
             android:layout_below="@id/poster_image_view"
             android:layout_margin="16dp"/>
 
+        <TextView
+            android:id="@+id/trailer_header_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trailers"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:layout_below="@id/overview_text_view"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
+
+        <HorizontalScrollView
+            android:id="@+id/trailer_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_below="@id/trailer_header_text_view" >
+
+            <!-- Trailers will go inside, change height to wrap content -->
+
+        </HorizontalScrollView>
+
+
+
     </RelativeLayout>
 
 </ScrollView>

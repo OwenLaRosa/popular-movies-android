@@ -85,19 +85,15 @@ public class TMDBClient {
         return movies;
     }
 
-    /**
-     * Query the API for movies
-     * @param method The API method to be used in the base URL
-     * @return: Search results as Movie objects
-     */
-    public Movie[] taskForMovieSearch(String method, String parameters) {
+    public String downloadJSON(String location) {
         HttpURLConnection urlConnection = null;
         BufferedReader bufferedReader = null;
         String jsonString = null;
 
         try {
+            URL url = new URL(location);
+
             // connect to the server
-            URL url = new URL(buildURL(method, parameters));
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -125,8 +121,19 @@ public class TMDBClient {
                     Log.e(LOG_TAG, "Error closing stream: ", e);
                 }
             }
-            return getMoviesFromJSON(jsonString);
+            return jsonString;
         }
+    }
+
+    /**
+     * Query the API for movies
+     * @param method The API method to be used in the base URL
+     * @return: Search results as Movie objects
+     */
+    public Movie[] getMovies(String method, String parameters) {
+        String url = buildURL(method, parameters);
+        String result = downloadJSON(url);
+        return getMoviesFromJSON(result);
     }
 
     private String getApiKey() {

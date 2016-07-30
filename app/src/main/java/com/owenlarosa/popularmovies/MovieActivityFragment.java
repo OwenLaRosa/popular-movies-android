@@ -145,7 +145,7 @@ public class MovieActivityFragment extends Fragment {
             String parameters = "";
             if (params.length > 1) parameters = params[1];
             if (params.length == 0) return null;
-            return client.taskForMovieSearch(method, parameters);
+            return client.getMovies(method, parameters);
         }
 
         @Override
@@ -154,7 +154,9 @@ public class MovieActivityFragment extends Fragment {
 
             // refresh the grid with the new data
             mMovieImageAdapter.clear();
-            mMovieImageAdapter.addAll(movies);
+            if (movies != null) {
+                mMovieImageAdapter.addAll(movies);
+            }
         }
     }
 

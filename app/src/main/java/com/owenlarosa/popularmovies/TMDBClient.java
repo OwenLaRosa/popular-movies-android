@@ -31,6 +31,10 @@ public class TMDBClient {
     public static final String KEY_RATING = "vote_average";
     public static final String KEY_OVERVIEW = "overview";
 
+    public static final String KEY_TRAILER_ID = "id";
+    public static final String KEY_TRAILER_KEY = "key";
+    public static final String KEY_TRAILER_NAME = "name";
+
     private static final String BASE_URL = "http://api.themoviedb.org/3/";
 
     private Context mContext;
@@ -44,7 +48,7 @@ public class TMDBClient {
      * @param method API method to be included in the URL
      * @return The complete URL
      */
-    private String buildURL(String method, String parameters) {
+    private String buildMovieURL(String method, String parameters) {
         // use a string builder because concatenated string is determined at runtime
         return new StringBuilder()
                 .append(BASE_URL)
@@ -52,6 +56,15 @@ public class TMDBClient {
                 .append("?api_key=")
                 .append(getApiKey())
                 .append(parameters).toString();
+    }
+
+    private String buildTrailerURL(Integer id) {
+        return new StringBuilder()
+                .append(BASE_URL)
+                .append("/movie/")
+                .append(id.toString())
+                .append("?api_key=")
+                .append(getApiKey()).toString();
     }
 
     /**
@@ -83,6 +96,27 @@ public class TMDBClient {
             return null;
         }
         return movies;
+    }
+
+    private Trailer[] getTrailersFromJSON(String jsonString) {
+        Trailer[] trailers;
+        try {
+            JSONObject rootObject = new JSONObject(jsonString);
+            JSONArray results = rootObject.getJSONArray("results");
+            trailers = new Trailer[results.length()];
+            for (int i = 0; i < results.length(); i++) {
+                Dictionary properties = new Hashtable();
+                JSONObject trailerData = (JSONObject) results.get(i);
+                properties.put(KEY_TRAILER_ID, trailerData.getString(KEY_TRAILER_ID));
+                properties.put(KEY_TRAILER_KEY, trailerData.getString(KEY_TRAILER_KEY));
+                properties.put(KEY_TRAILER_NAME, trailerData.getString(KEY_TRAILER_NAME));
+                Trailer trailer = new Trailer(properties);
+                trailers[i] = trailer;
+            }
+        } catch (JSONException e) {
+            return null;
+        }
+        return trailers;
     }
 
     public String downloadJSON(String location) {
@@ -131,9 +165,20 @@ public class TMDBClient {
      * @return: Search results as Movie objects
      */
     public Movie[] getMovies(String method, String parameters) {
-        String url = buildURL(method, parameters);
+        String url = buildMovieURL(method, parameters);
         String result = downloadJSON(url);
         return getMoviesFromJSON(result);
+    }
+
+    /**
+     *
+     * @param id A movie ID
+     * @return Results as array of Trailer objects
+     */
+    public Trailer[] getTrailersForMovieId(Integer id) {
+        String url = buildTrailerURL(id);
+        String result = downloadJSON(url);
+        return getTrailersFromJSON(result);
     }
 
     private String getApiKey() {

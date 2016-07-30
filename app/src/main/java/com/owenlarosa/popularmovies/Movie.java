@@ -3,6 +3,7 @@ package com.owenlarosa.popularmovies;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
 
 /**
@@ -20,6 +21,8 @@ public class Movie implements Parcelable {
     public String release_date;
     public Double rating;
     public String overview;
+
+    public ArrayList<Trailer> trailers = new ArrayList<Trailer>();
 
     private static final String POSTER_BASE_PATH = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_SIZE = "w185";

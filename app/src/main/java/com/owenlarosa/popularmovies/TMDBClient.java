@@ -66,6 +66,7 @@ public class TMDBClient {
                 .append(BASE_URL)
                 .append("/movie/")
                 .append(id.toString())
+                .append("/videos")
                 .append("?api_key=")
                 .append(getApiKey()).toString();
     }
@@ -75,6 +76,7 @@ public class TMDBClient {
                 .append(BASE_URL)
                 .append("/movie/")
                 .append(id.toString())
+                .append("/reviews")
                 .append("?api_key=")
                 .append(getApiKey()).toString();
     }

@@ -35,6 +35,9 @@ public class TMDBClient {
     public static final String KEY_TRAILER_KEY = "key";
     public static final String KEY_TRAILER_NAME = "name";
 
+    public static final String KEY_REVIEW_AUTHOR = "author";
+    public static final String KEY_REVIEW_CONTENT = "content";
+
     private static final String BASE_URL = "http://api.themoviedb.org/3/";
 
     private Context mContext;
@@ -59,6 +62,15 @@ public class TMDBClient {
     }
 
     private String buildTrailerURL(Integer id) {
+        return new StringBuilder()
+                .append(BASE_URL)
+                .append("/movie/")
+                .append(id.toString())
+                .append("?api_key=")
+                .append(getApiKey()).toString();
+    }
+
+    private String buildReviewURL(Integer id) {
         return new StringBuilder()
                 .append(BASE_URL)
                 .append("/movie/")
@@ -117,6 +129,26 @@ public class TMDBClient {
             return null;
         }
         return trailers;
+    }
+
+    private Review[] getReviewsFromJSON(String jsonString) {
+        Review[] reviews;
+        try {
+            JSONObject rootObject = new JSONObject(jsonString);
+            JSONArray results = rootObject.getJSONArray("results");
+            reviews = new Review[results.length()];
+            for (int i = 0; i < results.length(); i++) {
+                Dictionary properties = new Hashtable();
+                JSONObject reviewData = (JSONObject) results.get(i);
+                properties.put(KEY_REVIEW_AUTHOR, reviewData.getString(KEY_REVIEW_AUTHOR));
+                properties.put(KEY_REVIEW_CONTENT, reviewData.getString(KEY_REVIEW_CONTENT));
+                Review review = new Review(properties);
+                reviews[i] = review;
+            }
+        } catch (JSONException e) {
+            return null;
+        }
+        return reviews;
     }
 
     public String downloadJSON(String location) {
@@ -179,6 +211,12 @@ public class TMDBClient {
         String url = buildTrailerURL(id);
         String result = downloadJSON(url);
         return getTrailersFromJSON(result);
+    }
+
+    public Review[] getReviewsForMovieId(Integer id) {
+        String url = buildReviewURL(id);
+        String result = downloadJSON(url);
+        return getReviewsFromJSON(result);
     }
 
     private String getApiKey() {

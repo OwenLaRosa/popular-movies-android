@@ -53,7 +53,7 @@ public class MovieActivity extends AppCompatActivity implements MovieActivityFra
         if (mTwoPane) {
 
             Bundle args = new Bundle();
-            args.putParcelable(DetailActivityFragment.class.getSimpleName(), movie);
+            args.putParcelable(Movie.class.getSimpleName(), movie);
 
             DetailActivityFragment fragment = new DetailActivityFragment();
             fragment.setArguments(args);

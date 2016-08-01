@@ -40,8 +40,15 @@ public class DetailActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
-        Intent intent = getActivity().getIntent();
-        movie = (Movie) intent.getParcelableExtra(Movie.class.getSimpleName());
+        if (getActivity().getIntent() != null) {
+            Intent intent = getActivity().getIntent();
+            movie = (Movie) intent.getParcelableExtra(Movie.class.getSimpleName());
+        }
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            movie = arguments.getParcelable(Movie.class.getSimpleName());
+        }
 
         titleTextView.setText(movie.title);
         Picasso.with(getContext()).load(movie.getFullPosterPath()).into(posterImageView);

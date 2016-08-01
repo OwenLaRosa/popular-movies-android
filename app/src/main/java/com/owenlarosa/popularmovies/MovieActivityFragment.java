@@ -1,6 +1,5 @@
 package com.owenlarosa.popularmovies;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +26,10 @@ import butterknife.Unbinder;
  * A placeholder fragment containing a simple view.
  */
 public class MovieActivityFragment extends Fragment {
+
+    public interface Callback {
+        public void onShowDetail(Movie movie);
+    }
 
     TMDBClient client;
     FetchMovieTask fetchMovieTask = new FetchMovieTask();
@@ -116,9 +119,10 @@ public class MovieActivityFragment extends Fragment {
                 //Toast.makeText(getContext(), "This will launch the detail view.", Toast.LENGTH_SHORT);
 
                 Movie movie = (Movie) mMovieImageAdapter.getItem(position);
-                Intent detailIntent = new Intent(getActivity(), DetailActivity.class)
-                        .putExtra(Movie.class.getSimpleName(), movie);
-                startActivity(detailIntent);
+                ((Callback) getActivity()).onShowDetail(movie);
+                //Intent detailIntent = new Intent(getActivity(), DetailActivity.class)
+                //        .putExtra(Movie.class.getSimpleName(), movie);
+                //startActivity(detailIntent);
             }
         });
 

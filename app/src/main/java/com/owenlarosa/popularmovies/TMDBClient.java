@@ -7,12 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -151,74 +145,6 @@ public class TMDBClient {
             return null;
         }
         return reviews;
-    }
-
-    public String downloadJSON(String location) {
-        HttpURLConnection urlConnection = null;
-        BufferedReader bufferedReader = null;
-        String jsonString = null;
-
-        try {
-            URL url = new URL(location);
-
-            // connect to the server
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
-
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer stringBuffer = new StringBuffer();
-            if (inputStream == null) return null;
-
-            bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) stringBuffer.append(line + "\n");
-            if (stringBuffer.length() == 0) return null;
-
-            jsonString = stringBuffer.toString();
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Error: ", e);
-            return null;
-        } finally {
-            if (urlConnection != null) urlConnection.disconnect();
-
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream: ", e);
-                }
-            }
-            return jsonString;
-        }
-    }
-
-    /**
-     * Query the API for movies
-     * @param method The API method to be used in the base URL
-     * @return: Search results as Movie objects
-     */
-    public Movie[] getMovies(String method, String parameters) {
-        String url = buildMovieURL(method, parameters);
-        String result = downloadJSON(url);
-        return getMoviesFromJSON(result);
-    }
-
-    /**
-     *
-     * @param id A movie ID
-     * @return Results as array of Trailer objects
-     */
-    public Trailer[] getTrailersForMovieId(Integer id) {
-        String url = buildTrailerURL(id);
-        String result = downloadJSON(url);
-        return getTrailersFromJSON(result);
-    }
-
-    public Review[] getReviewsForMovieId(Integer id) {
-        String url = buildReviewURL(id);
-        String result = downloadJSON(url);
-        return getReviewsFromJSON(result);
     }
 
     private String getApiKey() {

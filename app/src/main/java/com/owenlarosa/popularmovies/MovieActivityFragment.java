@@ -160,7 +160,7 @@ public class MovieActivityFragment extends Fragment {
         } else if (category == "Top Rated") {
             url = client.buildMovieURL(movieCategories.get(category), "");
         } else {
-            url = client.buildMovieURL("discover/movie", "&with_genres" + movieCategories.get(category));
+            url = client.buildMovieURL("discover/movie", "&with_genres=" + movieCategories.get(category));
         }
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());

@@ -1,6 +1,5 @@
 package com.owenlarosa.popularmovies;
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -118,7 +117,7 @@ public class DetailActivityFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
 
             }
-        })
+        });
     }
 
     private void getReviews() {
@@ -137,7 +136,7 @@ public class DetailActivityFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
 
             }
-        })
+        });
     }
 
 }

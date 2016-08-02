@@ -41,7 +41,7 @@ public class TMDBClient {
     }
 
     /**
-     * Build a URL to be used with The Movie Database
+     * Build a URL to fetch movies
      * @param method API method to be included in the URL
      * @return The complete URL
      */
@@ -55,6 +55,11 @@ public class TMDBClient {
                 .append(parameters).toString();
     }
 
+    /**
+     * Build a URL to fetch movie trailers
+     * @param id A TMDB movie id
+     * @return The complete URL
+     */
     public String buildTrailerURL(Integer id) {
         return new StringBuilder()
                 .append(BASE_URL)
@@ -65,6 +70,11 @@ public class TMDBClient {
                 .append(getApiKey()).toString();
     }
 
+    /**
+     * Build a URL to fetch movie reviews
+     * @param id A TMDB movie id
+     * @return The complete URL
+     */
     public String buildReviewURL(Integer id) {
         return new StringBuilder()
                 .append(BASE_URL)
@@ -106,6 +116,11 @@ public class TMDBClient {
         return movies;
     }
 
+    /**
+     * Create Trailer objects from JSON
+     * @param jsonString JSON array of trailer search results
+     * @return Trailer instances from the JSON data
+     */
     public Trailer[] getTrailersFromJSON(String jsonString) {
         Trailer[] trailers;
         try {
@@ -127,6 +142,11 @@ public class TMDBClient {
         return trailers;
     }
 
+    /**
+     * Create Review objects from JSON
+     * @param jsonString JSON array of review search results
+     * @return Review instances from the JSON data
+     */
     public Review[] getReviewsFromJSON(String jsonString) {
         Review[] reviews;
         try {

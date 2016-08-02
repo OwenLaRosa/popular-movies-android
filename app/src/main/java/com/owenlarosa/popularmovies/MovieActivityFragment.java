@@ -131,8 +131,6 @@ public class MovieActivityFragment extends Fragment {
             }
         });
 
-        updateMovieList("Popular");
-
         if (savedInstanceState == null || !savedInstanceState.containsKey(MOVIES_KEY)) {
             updateMovieList("Popular");
         } else {

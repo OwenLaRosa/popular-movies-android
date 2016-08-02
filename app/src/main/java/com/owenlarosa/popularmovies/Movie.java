@@ -23,6 +23,7 @@ public class Movie implements Parcelable {
     public String overview;
 
     public ArrayList<Trailer> trailers = new ArrayList<Trailer>();
+    public ArrayList<Review> reviews = new ArrayList<Review>();
 
     private static final String POSTER_BASE_PATH = "http://image.tmdb.org/t/p/";
     private static final String IMAGE_SIZE = "w185";

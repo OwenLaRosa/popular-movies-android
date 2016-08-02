@@ -1,6 +1,5 @@
 package com.owenlarosa.popularmovies;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +13,13 @@ import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,7 +38,6 @@ public class MovieActivityFragment extends Fragment {
     }
 
     TMDBClient client;
-    FetchMovieTask fetchMovieTask = new FetchMovieTask();
     MovieImageAdapter mMovieImageAdapter;
 
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
@@ -126,8 +131,10 @@ public class MovieActivityFragment extends Fragment {
             }
         });
 
+        updateMovieList("Popular");
+
         if (savedInstanceState == null || !savedInstanceState.containsKey(MOVIES_KEY)) {
-            fetchMovieTask.execute("movie/popular");
+            updateMovieList("Popular");
         } else {
             mMovieImageAdapter.movies = savedInstanceState.getParcelableArrayList("movies");
         }
@@ -141,43 +148,40 @@ public class MovieActivityFragment extends Fragment {
         unbinder.unbind();
     }
 
-    public class FetchMovieTask extends AsyncTask<String, Void, Movie[]> {
-
-        @Override
-        protected Movie[] doInBackground(String... params) {
-            String method = params[0];
-            String parameters = "";
-            if (params.length > 1) parameters = params[1];
-            if (params.length == 0) return null;
-            return client.getMovies(method, parameters);
-        }
-
-        @Override
-        protected void onPostExecute(Movie[] movies) {
-            super.onPostExecute(movies);
-
-            // refresh the grid with the new data
-            mMovieImageAdapter.clear();
-            if (movies != null) {
-                mMovieImageAdapter.addAll(movies);
-            }
-        }
-    }
-
     private void updateMovieList(String category) {
         if (category == "Favorites") {
             // TODO: show favorite movies
             Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
             return;
         }
-        FetchMovieTask fetchMovieTask = new FetchMovieTask();
+
+        String url = "";
+
         if (category == "Popular") {
-            fetchMovieTask.execute(movieCategories.get(category));
+            url = client.buildMovieURL(movieCategories.get(category), "");
         } else if (category == "Top Rated") {
-            fetchMovieTask.execute(movieCategories.get(category));
+            url = client.buildMovieURL(movieCategories.get(category), "");
         } else {
-            fetchMovieTask.execute("discover/movie", "&with_genres=" + movieCategories.get(category));
+            url = client.buildMovieURL("discover/movie", "&with_genres" + movieCategories.get(category));
         }
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Movie[] movies = client.getMoviesFromJSON(response);
+                if (movies != null) {
+                    mMovieImageAdapter.clear();
+                    mMovieImageAdapter.addAll(movies);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
 }

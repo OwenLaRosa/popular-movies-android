@@ -51,7 +51,7 @@ public class TMDBClient {
      * @param method API method to be included in the URL
      * @return The complete URL
      */
-    private String buildMovieURL(String method, String parameters) {
+    public String buildMovieURL(String method, String parameters) {
         // use a string builder because concatenated string is determined at runtime
         return new StringBuilder()
                 .append(BASE_URL)
@@ -61,7 +61,7 @@ public class TMDBClient {
                 .append(parameters).toString();
     }
 
-    private String buildTrailerURL(Integer id) {
+    public String buildTrailerURL(Integer id) {
         return new StringBuilder()
                 .append(BASE_URL)
                 .append("/movie/")
@@ -71,7 +71,7 @@ public class TMDBClient {
                 .append(getApiKey()).toString();
     }
 
-    private String buildReviewURL(Integer id) {
+    public String buildReviewURL(Integer id) {
         return new StringBuilder()
                 .append(BASE_URL)
                 .append("/movie/")
@@ -86,7 +86,7 @@ public class TMDBClient {
      * @param jsonString JSON array of movie search results
      * @return Movie instances from the JSON data
      */
-    private Movie[] getMoviesFromJSON(String jsonString) {
+    public Movie[] getMoviesFromJSON(String jsonString) {
         Movie[] movies;
         try {
             JSONObject rootObject = new JSONObject(jsonString);
@@ -112,7 +112,7 @@ public class TMDBClient {
         return movies;
     }
 
-    private Trailer[] getTrailersFromJSON(String jsonString) {
+    public Trailer[] getTrailersFromJSON(String jsonString) {
         Trailer[] trailers;
         try {
             JSONObject rootObject = new JSONObject(jsonString);
@@ -133,7 +133,7 @@ public class TMDBClient {
         return trailers;
     }
 
-    private Review[] getReviewsFromJSON(String jsonString) {
+    public Review[] getReviewsFromJSON(String jsonString) {
         Review[] reviews;
         try {
             JSONObject rootObject = new JSONObject(jsonString);

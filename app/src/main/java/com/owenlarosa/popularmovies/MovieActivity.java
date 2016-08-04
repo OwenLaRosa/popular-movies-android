@@ -1,5 +1,6 @@
 package com.owenlarosa.popularmovies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -53,18 +54,18 @@ public class MovieActivity extends AppCompatActivity implements MovieActivityFra
     public void onShowDetail(Movie movie) {
         if (mTwoPane) {
 
-            //Bundle args = new Bundle();
-            //args.putParcelable(Movie.class.getSimpleName(), movie);
+            Bundle args = new Bundle();
+            args.putSerializable(Movie.class.getSimpleName(), movie);
 
-            //DetailActivityFragment fragment = new DetailActivityFragment();
-            //fragment.setArguments(args);
+            DetailActivityFragment fragment = new DetailActivityFragment();
+            fragment.setArguments(args);
 
-            //getSupportFragmentManager().beginTransaction()
-            //        .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
-            //        .commit();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
         } else {
-            //Intent intent = new Intent(this, DetailActivity.class).putExtra(Movie.class.getSimpleName(), movie);
-            //startActivity(intent);
+            Intent intent = new Intent(this, DetailActivity.class).putExtra(Movie.class.getSimpleName(), movie);
+            startActivity(intent);
         }
     }
 }

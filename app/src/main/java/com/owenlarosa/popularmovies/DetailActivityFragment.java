@@ -54,12 +54,12 @@ public class DetailActivityFragment extends Fragment {
 
         if (getActivity().getIntent() != null) {
             Intent intent = getActivity().getIntent();
-            movie = (Movie) intent.getParcelableExtra(Movie.class.getSimpleName());
+            movie = (Movie) intent.getSerializableExtra(Movie.class.getSimpleName());
         }
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            movie = arguments.getParcelable(Movie.class.getSimpleName());
+            movie = (Movie) arguments.getSerializable(Movie.class.getSimpleName());
         }
 
         titleTextView.setText(movie.getTitle());

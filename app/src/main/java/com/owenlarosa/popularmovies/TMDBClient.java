@@ -132,9 +132,13 @@ public class TMDBClient {
             JSONArray results = rootObject.getJSONArray("results");
             trailers = new Trailer[results.length()];
             for (int i = 0; i < results.length(); i++) {
-                Dictionary properties = new Hashtable();
                 JSONObject trailerData = (JSONObject) results.get(i);
                 // TODO: Create trailer entity
+                Trailer trailer = new Trailer();
+                trailer.setIdentifier(trailerData.getString(KEY_TRAILER_ID));
+                trailer.setKey(trailerData.getString(KEY_TRAILER_KEY));
+                trailer.setName(trailerData.getString(KEY_TRAILER_NAME));
+                trailers[i] = trailer;
             }
         } catch (JSONException e) {
             return null;
@@ -157,6 +161,10 @@ public class TMDBClient {
                 Dictionary properties = new Hashtable();
                 JSONObject reviewData = (JSONObject) results.get(i);
                 // TODO: Create review entity
+                Review review = new Review();
+                review.setAuthor(reviewData.getString(KEY_REVIEW_AUTHOR));
+                review.setContent(reviewData.getString(KEY_REVIEW_CONTENT));
+                reviews[i] = review;
             }
         } catch (JSONException e) {
             return null;

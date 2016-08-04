@@ -10,6 +10,7 @@ public class DatabaseGenerator {
 
     public static void main(String[] args) throws Exception {
         Schema schema = new Schema(1, "com.owenlarosa.popularmovies.db");
+        schema.enableKeepSectionsByDefault();
 
         Entity movie = schema.addEntity("Movie");
         movie.addIdProperty();

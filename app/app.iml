@@ -117,6 +117,7 @@
     <orderEntry type="library" exported="" name="butterknife-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="butterknife-annotations-8.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.0.1" level="project" />
+    <orderEntry type="library" exported="" name="greendao-2.1.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.0.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.3.0" level="project" />
   </component>

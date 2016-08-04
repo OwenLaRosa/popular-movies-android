@@ -20,6 +20,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.owenlarosa.popularmovies.db.Movie;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -85,8 +86,8 @@ public class MovieActivityFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(MOVIES_KEY, mMovieImageAdapter.movies);
         super.onSaveInstanceState(outState);
+        //outState.putParcelableArrayList(MOVIES_KEY, mMovieImageAdapter.movies);
     }
 
     @Override
@@ -130,11 +131,10 @@ public class MovieActivityFragment extends Fragment {
                 //startActivity(detailIntent);
             }
         });
-
         if (savedInstanceState == null || !savedInstanceState.containsKey(MOVIES_KEY)) {
             updateMovieList("Popular");
         } else {
-            mMovieImageAdapter.movies = savedInstanceState.getParcelableArrayList("movies");
+            //mMovieImageAdapter.movies = savedInstanceState.getParcelableArrayList("movies");
         }
 
         return rootView;

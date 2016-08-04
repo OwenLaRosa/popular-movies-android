@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.owenlarosa.popularmovies.db.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class MovieImageAdapter extends BaseAdapter {
             holder = (ViewHolder) cell.getTag();
         }
         Picasso.with(mContext).load(movies.get(position).getFullPosterPath()).into(holder.imageView);
-        holder.textView.setText(movies.get(position).title);
+        holder.textView.setText(movies.get(position).getTitle());
         return cell;
     }
 

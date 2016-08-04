@@ -1,5 +1,6 @@
 package com.owenlarosa.popularmovies.db;
 
+import java.io.Serializable;
 import java.util.List;
 import com.owenlarosa.popularmovies.db.DaoSession;
 import de.greenrobot.dao.DaoException;
@@ -11,7 +12,7 @@ import de.greenrobot.dao.DaoException;
 /**
  * Entity mapped to table "MOVIE".
  */
-public class Movie {
+public class Movie implements Serializable {
 
     private Long id;
     private Integer identifier;

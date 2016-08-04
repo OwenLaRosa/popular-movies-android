@@ -16,6 +16,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.owenlarosa.popularmovies.db.Movie;
+import com.owenlarosa.popularmovies.db.Review;
+import com.owenlarosa.popularmovies.db.Trailer;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -59,20 +62,20 @@ public class DetailActivityFragment extends Fragment {
             movie = arguments.getParcelable(Movie.class.getSimpleName());
         }
 
-        titleTextView.setText(movie.title);
+        titleTextView.setText(movie.getTitle());
         Picasso.with(getContext()).load(movie.getFullPosterPath()).into(posterImageView);
         // get the release year, should be the first 4 characters
-        String releaseYear = movie.release_date.substring(0, 4);
+        String releaseYear = movie.getReleaseDate().substring(0, 4);
         yearTextView.setText(releaseYear);
-        ratingTextView.setText("★ " + movie.rating.toString() + "/10");
+        ratingTextView.setText("★ " + movie.getRating().toString() + "/10");
 
         int colorId;
         // change rating color based on value
-        if (movie.rating < 2.5) {
+        if (movie.getRating() < 2.5) {
             colorId = R.color.rating_bad;
-        } else if (movie.rating < 5.0) {
+        } else if (movie.getRating() < 5.0) {
             colorId = R.color.rating_alright;
-        } else if (movie.rating <= 7.5) {
+        } else if (movie.getRating() <= 7.5) {
             colorId = R.color.rating_good;
         } else {
             colorId = R.color.rating_great;
@@ -80,7 +83,7 @@ public class DetailActivityFragment extends Fragment {
         ratingTextView.setTextColor(getResources().getColor(colorId));
 
         TextView overviewTextView = (TextView) rootView.findViewById(R.id.overview_text_view);
-        overviewTextView.setText(movie.overview);
+        overviewTextView.setText(movie.getOverview());
 
         // set the title
         getActivity().setTitle("Movie Details");
@@ -102,14 +105,14 @@ public class DetailActivityFragment extends Fragment {
     }
 
     private void getTrailers() {
-        String url = client.buildTrailerURL(movie.id);
+        String url = client.buildTrailerURL(movie.getIdentifier());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Trailer[] trailers = client.getTrailersFromJSON(response);
-                movie.trailers.clear();
+                movie.getTrailers().clear();
                 for (int i = 0; i < trailers.length; i++) {
-                    movie.trailers.add(trailers[i]);
+                    movie.getTrailers().add(trailers[i]);
                 }
             }
         }, new Response.ErrorListener() {
@@ -121,14 +124,14 @@ public class DetailActivityFragment extends Fragment {
     }
 
     private void getReviews() {
-        String url = client.buildReviewURL(movie.id);
+        String url = client.buildReviewURL(movie.getIdentifier());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Review[] reviews = client.getReviewsFromJSON(response);
-                movie.reviews.clear();
+                movie.getReviews().clear();
                 for (int i = 0; i < reviews.length; i++) {
-                    movie.reviews.add(reviews[i]);
+                    movie.getReviews().add(reviews[i]);
                 }
             }
         }, new Response.ErrorListener() {

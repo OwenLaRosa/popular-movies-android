@@ -3,6 +3,10 @@ package com.owenlarosa.popularmovies;
 import android.content.Context;
 import android.util.Log;
 
+import com.owenlarosa.popularmovies.db.Movie;
+import com.owenlarosa.popularmovies.db.Review;
+import com.owenlarosa.popularmovies.db.Trailer;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -98,15 +102,15 @@ public class TMDBClient {
             movies = new Movie[results.length()];
 
             for (int i = 0; i < results.length(); i++) {
-                Dictionary properties = new Hashtable();
                 JSONObject movieData = (JSONObject) results.get(i);
-                properties.put(KEY_ID, movieData.getInt(KEY_ID));
-                properties.put(KEY_TITLE, movieData.getString(KEY_TITLE));
-                properties.put(KEY_POSTER_PATH, movieData.getString(KEY_POSTER_PATH));
-                properties.put(KEY_RELEASE_DATE, movieData.getString(KEY_RELEASE_DATE));
-                properties.put(KEY_RATING, movieData.getDouble(KEY_RATING));
-                properties.put(KEY_OVERVIEW, movieData.getString(KEY_OVERVIEW));
-                Movie movie = new Movie(properties);
+
+                Movie movie = new Movie();
+                movie.setIdentifier(movieData.getInt(KEY_ID));
+                movie.setTitle(movieData.getString(KEY_TITLE));
+                movie.setPosterPath(movieData.getString(KEY_POSTER_PATH));
+                movie.setReleaseDate(movieData.getString(KEY_RELEASE_DATE));
+                movie.setRating(movieData.getDouble(KEY_RATING));
+                movie.setOverview(movieData.getString(KEY_OVERVIEW));
                 movies[i] = movie;
             }
         } catch (JSONException e) {
@@ -130,11 +134,7 @@ public class TMDBClient {
             for (int i = 0; i < results.length(); i++) {
                 Dictionary properties = new Hashtable();
                 JSONObject trailerData = (JSONObject) results.get(i);
-                properties.put(KEY_TRAILER_ID, trailerData.getString(KEY_TRAILER_ID));
-                properties.put(KEY_TRAILER_KEY, trailerData.getString(KEY_TRAILER_KEY));
-                properties.put(KEY_TRAILER_NAME, trailerData.getString(KEY_TRAILER_NAME));
-                Trailer trailer = new Trailer(properties);
-                trailers[i] = trailer;
+                // TODO: Create trailer entity
             }
         } catch (JSONException e) {
             return null;
@@ -156,10 +156,7 @@ public class TMDBClient {
             for (int i = 0; i < results.length(); i++) {
                 Dictionary properties = new Hashtable();
                 JSONObject reviewData = (JSONObject) results.get(i);
-                properties.put(KEY_REVIEW_AUTHOR, reviewData.getString(KEY_REVIEW_AUTHOR));
-                properties.put(KEY_REVIEW_CONTENT, reviewData.getString(KEY_REVIEW_CONTENT));
-                Review review = new Review(properties);
-                reviews[i] = review;
+                // TODO: Create review entity
             }
         } catch (JSONException e) {
             return null;

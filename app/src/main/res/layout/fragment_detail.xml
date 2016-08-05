@@ -104,14 +104,15 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp" />
 
-        <ScrollView
-            android:id="@+id/review_scroll_view"
+        <LinearLayout
+            android:id="@+id/review_linear_layout"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/review_header_text_view"
             android:layout_margin="16dp">
 
-        </ScrollView>
+        </LinearLayout>
 
     </RelativeLayout>
 

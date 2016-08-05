@@ -32,6 +32,13 @@ public class ReviewView extends LinearLayout {
     @BindView(R.id.review_content_textview) TextView contentTextView;
     @BindView(R.id.review_expand_button) Button expandReviewButton;
 
+    /**
+     * The number of lines of text to be displayed when text is collapsed.
+     * If the actual lines of text is less than this number, the smaller number is used
+     * and the view is not expandable.
+     */
+    public int numLines = 4;
+
     Unbinder unbinder;
 
     public ReviewView(Context context) {
@@ -72,14 +79,14 @@ public class ReviewView extends LinearLayout {
             @Override
             public void run() {
                 int lineCount = contentTextView.getLineCount();
-                if (lineCount > 4) {
+                if (lineCount > numLines) {
                     // show the view and expand to appropriate size
                     expandReviewButton.setVisibility(View.VISIBLE);
                 } else {
                     // hide the view and shrink it out of sight
                     expandReviewButton.setVisibility(View.GONE);
                 }
-                contentTextView.setMaxLines(4);
+                contentTextView.setMaxLines(numLines);
             }
         });
     }
@@ -92,7 +99,7 @@ public class ReviewView extends LinearLayout {
             expandReviewButton.setText("COLLAPSE");
         } else {
             // 4 is the default maximum number of lines of text
-            contentTextView.setMaxLines(4);
+            contentTextView.setMaxLines(numLines);
             expandReviewButton.setText("EXPAND");
         }
     }

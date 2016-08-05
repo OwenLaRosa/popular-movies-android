@@ -3,6 +3,7 @@ package com.owenlarosa.popularmovies;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,6 +94,8 @@ public class DetailActivityFragment extends Fragment {
         client = new TMDBClient(getContext());
         requestQueue = Volley.newRequestQueue(getActivity());
 
+        getReviews();
+
         return rootView;
     }
 
@@ -126,14 +129,20 @@ public class DetailActivityFragment extends Fragment {
     }
 
     private void getReviews() {
+        Log.d("", "get reviews");
         String url = client.buildReviewURL(movie.getIdentifier());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 Review[] reviews = client.getReviewsFromJSON(response);
-                movie.getReviews().clear();
+                Log.d("", String.format("Number of reviews: %d", reviews.length));
+                //movie.getReviews().clear();
                 for (int i = 0; i < reviews.length; i++) {
-                    movie.getReviews().add(reviews[i]);
+                    //movie.getReviews().add(reviews[i]);
+                    ReviewView reviewView = new ReviewView(getContext());
+                    reviewView.authorTextView.setText(reviews[i].getAuthor());
+                    reviewView.contentTextView.setText(reviews[i].getContent());
+                    reviewLinearLayout.addView(reviewView);
                 }
             }
         }, new Response.ErrorListener() {
@@ -142,6 +151,7 @@ public class DetailActivityFragment extends Fragment {
 
             }
         });
+        requestQueue.add(stringRequest);
     }
 
 }

@@ -18,8 +18,7 @@
         android:id="@+id/review_content_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:textAppearanceMedium"
-        android:maxLines="4" />
+        android:textAppearance="?android:textAppearanceMedium" />
 
     <Button
         android:id="@+id/review_expand_button"

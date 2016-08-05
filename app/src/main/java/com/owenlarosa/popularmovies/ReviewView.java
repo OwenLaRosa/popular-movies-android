@@ -25,6 +25,10 @@ public class ReviewView extends LinearLayout {
     // referenced http://code.tutsplus.com/tutorials/creating-compound-views-on-android--cms-22889
 
     @BindView(R.id.review_author_textview) TextView authorTextView;
+    /**
+     * Displays text of movie review
+     * WARNING: Do not set the text of this view directly. Use the setContent() method instead.
+     */
     @BindView(R.id.review_content_textview) TextView contentTextView;
     @BindView(R.id.review_expand_button) Button expandReviewButton;
 
@@ -52,6 +56,32 @@ public class ReviewView extends LinearLayout {
         unbinder = ButterKnife.bind(this, rootView);
 
         expandReviewButton.setText("EXPAND");
+    }
+
+    /**
+     * Sets the text content of the movie review
+     * @param content The full text of the review
+     */
+    public void setContent(String content) {
+        contentTextView.setText(content);
+
+        // getLineCount() will only work after the view renders
+        // The logic must be moved here to work around this problem
+        // see this SO post for details: http://stackoverflow.com/questions/12037377/how-to-get-number-of-lines-of-textview
+        contentTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                int lineCount = contentTextView.getLineCount();
+                if (lineCount > 4) {
+                    // show the view and expand to appropriate size
+                    expandReviewButton.setVisibility(View.VISIBLE);
+                } else {
+                    // hide the view and shrink it out of sight
+                    expandReviewButton.setVisibility(View.GONE);
+                }
+                contentTextView.setMaxLines(4);
+            }
+        });
     }
 
     @OnClick(R.id.review_expand_button)

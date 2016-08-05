@@ -141,7 +141,8 @@ public class DetailActivityFragment extends Fragment {
                     //movie.getReviews().add(reviews[i]);
                     ReviewView reviewView = new ReviewView(getContext());
                     reviewView.authorTextView.setText(reviews[i].getAuthor());
-                    reviewView.contentTextView.setText(reviews[i].getContent());
+                    // ReviewView requires setting the content with this method instead
+                    reviewView.setContent(reviews[i].getContent());
                     reviewLinearLayout.addView(reviewView);
                 }
             }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class DetailActivityFragment extends Fragment {
     @BindView(R.id.poster_image_view) ImageView posterImageView;
     @BindView(R.id.year_text_view) TextView yearTextView;
     @BindView(R.id.rating_text_view) TextView ratingTextView;
+    @BindView(R.id.review_linear_layout) LinearLayout reviewLinearLayout;
 
     TMDBClient client;
     RequestQueue requestQueue;

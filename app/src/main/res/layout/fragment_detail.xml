@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="lorem ipsum dolor sit amet"
-            android:textSize="15sp"
+            android:textAppearance="?android:textAppearanceMedium"
             android:layout_below="@id/poster_image_view"
             android:layout_margin="16dp"/>
 

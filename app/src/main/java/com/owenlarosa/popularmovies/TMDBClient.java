@@ -67,7 +67,7 @@ public class TMDBClient {
     public String buildTrailerURL(Integer id) {
         return new StringBuilder()
                 .append(BASE_URL)
-                .append("/movie/")
+                .append("movie/")
                 .append(id.toString())
                 .append("/videos")
                 .append("?api_key=")
@@ -82,7 +82,7 @@ public class TMDBClient {
     public String buildReviewURL(Integer id) {
         return new StringBuilder()
                 .append(BASE_URL)
-                .append("/movie/")
+                .append("movie/")
                 .append(id.toString())
                 .append("/reviews")
                 .append("?api_key=")

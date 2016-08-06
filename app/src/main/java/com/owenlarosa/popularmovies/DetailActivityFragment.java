@@ -38,6 +38,7 @@ public class DetailActivityFragment extends Fragment {
     @BindView(R.id.year_text_view) TextView yearTextView;
     @BindView(R.id.rating_text_view) TextView ratingTextView;
     @BindView(R.id.review_linear_layout) LinearLayout reviewLinearLayout;
+    @BindView(R.id.trailer_linear_layout) LinearLayout trailerLinearLayout;
 
     TMDBClient client;
     RequestQueue requestQueue;
@@ -95,6 +96,7 @@ public class DetailActivityFragment extends Fragment {
         requestQueue = Volley.newRequestQueue(getActivity());
 
         getReviews();
+        getTrailers();
 
         return rootView;
     }
@@ -115,9 +117,12 @@ public class DetailActivityFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 Trailer[] trailers = client.getTrailersFromJSON(response);
-                movie.getTrailers().clear();
                 for (int i = 0; i < trailers.length; i++) {
-                    movie.getTrailers().add(trailers[i]);
+                    TrailerView trailerView = new TrailerView(getContext());
+                    trailerView.nameTextView.setText(trailers[i].getName());
+                    String trailerUrl = "https://www.youtube.com/watch?v=" + trailers[i].getKey();
+                    Picasso.with(getContext()).load(trailerUrl).into(trailerView.thumbnailImageView);
+                    trailerLinearLayout.addView(trailerView);
                 }
             }
         }, new Response.ErrorListener() {
@@ -126,6 +131,7 @@ public class DetailActivityFragment extends Fragment {
 
             }
         });
+        requestQueue.add(stringRequest);
     }
 
     private void getReviews() {

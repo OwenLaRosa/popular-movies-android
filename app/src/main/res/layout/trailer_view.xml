@@ -4,16 +4,19 @@
     android:layout_height="wrap_content">
 
     <ImageView
+        android:id="@+id/trailer_thumbnail_imageview"
         android:layout_width="128dp"
         android:layout_height="72dp"
         android:scaleType="center" />
 
     <Button
+        android:id="@+id/trailer_play_button"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_gravity="center" />
 
     <TextView
+        android:id="@+id/trailer_name_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:textAppearanceSmall" />

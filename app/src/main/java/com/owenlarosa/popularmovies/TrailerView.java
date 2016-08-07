@@ -1,12 +1,17 @@
 package com.owenlarosa.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.owenlarosa.popularmovies.db.Trailer;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,6 +26,8 @@ public class TrailerView extends FrameLayout {
 
     @BindView(R.id.trailer_thumbnail_imageview) ImageView thumbnailImageView;
     @BindView(R.id.trailer_name_textview) TextView nameTextView;
+
+    private Trailer trailer;
 
     Unbinder unbinder;
 
@@ -48,7 +55,22 @@ public class TrailerView extends FrameLayout {
 
     @OnClick(R.id.trailer_play_button)
     public void playTrailer(View view) {
-        // TODO: show movie trailer intent
+        // Let the user view the video in browser or YouTube app
+        // http://stackoverflow.com/questions/574195/android-youtube-app-play-video-intent
+        String videoUrl = "https://www.youtube.com/watch?v=" + trailer.getKey();
+        Intent videoIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(videoUrl));
+        getContext().startActivity(videoIntent);
     }
 
+    /**
+     * Sets the trailer associated with the view and downloads the thumbnail
+     * @param trailer
+     */
+    public void setTrailer(Trailer trailer) {
+        this.trailer = trailer;
+        // get trailer thumbnail from TMDB key
+        // https://discussions.udacity.com/t/getting-trailers/44997/4
+        String trailerUrl = "http://img.youtube.com/vi/" + trailer.getKey() + "/0.jpg";
+        Picasso.with(getContext()).load(trailerUrl).into(thumbnailImageView);
+    }
 }

@@ -120,10 +120,7 @@ public class DetailActivityFragment extends Fragment {
                 for (int i = 0; i < trailers.length; i++) {
                     TrailerView trailerView = new TrailerView(getContext());
                     trailerView.nameTextView.setText(trailers[i].getName());
-                    // get trailer thumbnail from TMDB key
-                    // https://discussions.udacity.com/t/getting-trailers/44997/4
-                    String trailerUrl = "http://img.youtube.com/vi/" + trailers[i].getKey() + "/0.jpg";
-                    Picasso.with(getContext()).load(trailerUrl).into(trailerView.thumbnailImageView);
+                    trailerView.setTrailer(trailers[i]);
                     trailerLinearLayout.addView(trailerView);
                 }
             }

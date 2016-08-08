@@ -87,6 +87,7 @@ public class MovieActivityFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putSerializable(MOVIES_KEY, mMovieImageAdapter.movies);
         //outState.putParcelableArrayList(MOVIES_KEY, mMovieImageAdapter.movies);
     }
 
@@ -137,7 +138,7 @@ public class MovieActivityFragment extends Fragment {
                     popularPosition,
                     drawerListAdapter.getItemId(popularPosition));
         } else {
-            //mMovieImageAdapter.movies = savedInstanceState.getParcelableArrayList("movies");
+            mMovieImageAdapter.movies = (ArrayList<Movie>) savedInstanceState.getSerializable(MOVIES_KEY);
         }
 
         return rootView;

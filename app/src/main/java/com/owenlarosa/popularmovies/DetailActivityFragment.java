@@ -36,6 +36,7 @@ import butterknife.Unbinder;
 public class DetailActivityFragment extends Fragment {
 
     private static final String TRAILERS_KEY = "trailers";
+    private static final String REVIEWS_KEY = "reviews";
 
     @BindView(R.id.title_text_view) TextView titleTextView;
     @BindView(R.id.poster_image_view) ImageView posterImageView;
@@ -52,6 +53,7 @@ public class DetailActivityFragment extends Fragment {
     private Movie movie;
 
     private ArrayList<Trailer> displayedTrailers = new ArrayList<Trailer>();
+    private ArrayList<Review> displayedReviews = new ArrayList<Review>();
 
     public DetailActivityFragment() {
     }
@@ -60,6 +62,7 @@ public class DetailActivityFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(TRAILERS_KEY, displayedTrailers);
+        outState.putSerializable(REVIEWS_KEY, displayedReviews);
     }
 
     @Override
@@ -113,8 +116,12 @@ public class DetailActivityFragment extends Fragment {
             displayedTrailers = (ArrayList<Trailer>) savedInstanceState.getSerializable(TRAILERS_KEY);
             displayTrailers(displayedTrailers);
         }
-
-        getReviews();
+        if (savedInstanceState == null || !savedInstanceState.containsKey(REVIEWS_KEY)) {
+            getReviews();
+        } else {
+            displayedReviews = (ArrayList<Review>) savedInstanceState.getSerializable(REVIEWS_KEY);
+            displayReviews(displayedReviews);
+        }
 
         return rootView;
     }
@@ -160,13 +167,10 @@ public class DetailActivityFragment extends Fragment {
                 Log.d("", String.format("Number of reviews: %d", reviews.length));
                 //movie.getReviews().clear();
                 for (int i = 0; i < reviews.length; i++) {
-                    //movie.getReviews().add(reviews[i]);
-                    ReviewView reviewView = new ReviewView(getContext());
-                    reviewView.authorTextView.setText(reviews[i].getAuthor());
-                    // ReviewView requires setting the content with this method instead
-                    reviewView.setContent(reviews[i].getContent());
-                    reviewLinearLayout.addView(reviewView);
+                    Review review = reviews[i];
+                    displayedReviews.add(review);
                 }
+                displayReviews(displayedReviews);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -184,6 +188,17 @@ public class DetailActivityFragment extends Fragment {
             trailerView.nameTextView.setText(trailer.getName());
             trailerView.setTrailer(trailer);
             trailerLinearLayout.addView(trailerView);
+        }
+    }
+
+    private void displayReviews(ArrayList<Review> reviews) {
+        for (int i = 0; i < reviews.size(); i++) {
+            Review review = reviews.get(i);
+            ReviewView reviewView = new ReviewView(getContext());
+            reviewView.authorTextView.setText(review.getAuthor());
+            // ReviewView requires setting the content with this method instead
+            reviewView.setContent(review.getContent());
+            reviewLinearLayout.addView(reviewView);
         }
     }
 

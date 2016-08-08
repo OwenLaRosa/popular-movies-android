@@ -23,6 +23,8 @@ import com.owenlarosa.popularmovies.db.Review;
 import com.owenlarosa.popularmovies.db.Trailer;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -32,6 +34,8 @@ import butterknife.Unbinder;
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment {
+
+    private static final String TRAILERS_KEY = "trailers";
 
     @BindView(R.id.title_text_view) TextView titleTextView;
     @BindView(R.id.poster_image_view) ImageView posterImageView;
@@ -47,7 +51,15 @@ public class DetailActivityFragment extends Fragment {
 
     private Movie movie;
 
+    private ArrayList<Trailer> displayedTrailers = new ArrayList<Trailer>();
+
     public DetailActivityFragment() {
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(TRAILERS_KEY, displayedTrailers);
     }
 
     @Override
@@ -95,8 +107,14 @@ public class DetailActivityFragment extends Fragment {
         client = new TMDBClient(getContext());
         requestQueue = Volley.newRequestQueue(getActivity());
 
+        if (savedInstanceState == null || !savedInstanceState.containsKey(TRAILERS_KEY)) {
+            getTrailers();
+        } else {
+            displayedTrailers = (ArrayList<Trailer>) savedInstanceState.getSerializable(TRAILERS_KEY);
+            displayTrailers(displayedTrailers);
+        }
+
         getReviews();
-        getTrailers();
 
         return rootView;
     }
@@ -118,11 +136,10 @@ public class DetailActivityFragment extends Fragment {
             public void onResponse(String response) {
                 Trailer[] trailers = client.getTrailersFromJSON(response);
                 for (int i = 0; i < trailers.length; i++) {
-                    TrailerView trailerView = new TrailerView(getContext());
-                    trailerView.nameTextView.setText(trailers[i].getName());
-                    trailerView.setTrailer(trailers[i]);
-                    trailerLinearLayout.addView(trailerView);
+                    Trailer trailer = trailers[i];
+                    displayedTrailers.add(i, trailer);
                 }
+                displayTrailers(displayedTrailers);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -158,6 +175,16 @@ public class DetailActivityFragment extends Fragment {
             }
         });
         requestQueue.add(stringRequest);
+    }
+
+    private void displayTrailers(ArrayList<Trailer> trailers) {
+        for (int i = 0; i < trailers.size(); i++) {
+            Trailer trailer = trailers.get(i);
+            TrailerView trailerView = new TrailerView(getContext());
+            trailerView.nameTextView.setText(trailer.getName());
+            trailerView.setTrailer(trailer);
+            trailerLinearLayout.addView(trailerView);
+        }
     }
 
 }

@@ -132,7 +132,10 @@ public class MovieActivityFragment extends Fragment {
             }
         });
         if (savedInstanceState == null || !savedInstanceState.containsKey(MOVIES_KEY)) {
-            updateMovieList("Popular");
+            int popularPosition = 1;
+            drawerList.performItemClick(drawerListAdapter.getView(popularPosition, null, null),
+                    popularPosition,
+                    drawerListAdapter.getItemId(popularPosition));
         } else {
             //mMovieImageAdapter.movies = savedInstanceState.getParcelableArrayList("movies");
         }

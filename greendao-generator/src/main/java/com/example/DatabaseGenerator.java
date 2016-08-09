@@ -13,7 +13,7 @@ public class DatabaseGenerator {
         schema.enableKeepSectionsByDefault();
 
         Entity movie = schema.addEntity("Movie");
-        movie.addIdProperty();
+        movie.addIdProperty().autoincrement();
         // TMDB movie id, not SQL id property
         movie.addIntProperty("identifier");
         movie.addStringProperty("title");
@@ -23,21 +23,21 @@ public class DatabaseGenerator {
         movie.addStringProperty("overview");
 
         Entity review = schema.addEntity("Review");
-        review.addIdProperty();
+        review.addIdProperty().autoincrement();
         review.addStringProperty("author");
         review.addStringProperty("content");
 
         Entity trailer = schema.addEntity("Trailer");
-        trailer.addIdProperty();
+        trailer.addIdProperty().autoincrement();
         trailer.addStringProperty("identifier");
         trailer.addStringProperty("key");
         trailer.addStringProperty("name");
 
-        Property reviewId = movie.addLongProperty("reviewId").notNull().getProperty();
+        Property reviewId = review.addLongProperty("movieId").notNull().getProperty();
         ToMany movieToReviews = movie.addToMany(review, reviewId);
         movieToReviews.setName("reviews");
 
-        Property trailerId = movie.addLongProperty("trailerId").notNull().getProperty();
+        Property trailerId = trailer.addLongProperty("movieId").notNull().getProperty();
         ToMany movieToTrailers = movie.addToMany(trailer, trailerId);
         movieToTrailers.setName("trailers");
 

@@ -30,7 +30,7 @@ public class TrailerDao extends AbstractDao<Trailer, Long> {
         public final static Property Identifier = new Property(1, String.class, "identifier", false, "IDENTIFIER");
         public final static Property Key = new Property(2, String.class, "key", false, "KEY");
         public final static Property Name = new Property(3, String.class, "name", false, "NAME");
-        public final static Property TrailerId = new Property(4, long.class, "trailerId", false, "TRAILER_ID");
+        public final static Property MovieId = new Property(4, long.class, "movieId", false, "MOVIE_ID");
     };
 
     private Query<Trailer> movie_TrailersQuery;
@@ -47,11 +47,11 @@ public class TrailerDao extends AbstractDao<Trailer, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"TRAILER\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"IDENTIFIER\" TEXT," + // 1: identifier
                 "\"KEY\" TEXT," + // 2: key
                 "\"NAME\" TEXT," + // 3: name
-                "\"TRAILER_ID\" INTEGER NOT NULL );"); // 4: trailerId
+                "\"MOVIE_ID\" INTEGER NOT NULL );"); // 4: movieId
     }
 
     /** Drops the underlying database table. */
@@ -84,6 +84,7 @@ public class TrailerDao extends AbstractDao<Trailer, Long> {
         if (name != null) {
             stmt.bindString(4, name);
         }
+        stmt.bindLong(5, entity.getMovieId());
     }
 
     /** @inheritdoc */
@@ -99,7 +100,8 @@ public class TrailerDao extends AbstractDao<Trailer, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // identifier
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // key
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // name
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
+            cursor.getLong(offset + 4) // movieId
         );
         return entity;
     }
@@ -111,6 +113,7 @@ public class TrailerDao extends AbstractDao<Trailer, Long> {
         entity.setIdentifier(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setKey(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setMovieId(cursor.getLong(offset + 4));
      }
     
     /** @inheritdoc */
@@ -137,16 +140,16 @@ public class TrailerDao extends AbstractDao<Trailer, Long> {
     }
     
     /** Internal query to resolve the "trailers" to-many relationship of Movie. */
-    public List<Trailer> _queryMovie_Trailers(long trailerId) {
+    public List<Trailer> _queryMovie_Trailers(long movieId) {
         synchronized (this) {
             if (movie_TrailersQuery == null) {
                 QueryBuilder<Trailer> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.TrailerId.eq(null));
+                queryBuilder.where(Properties.MovieId.eq(null));
                 movie_TrailersQuery = queryBuilder.build();
             }
         }
         Query<Trailer> query = movie_TrailersQuery.forCurrentThread();
-        query.setParameter(0, trailerId);
+        query.setParameter(0, movieId);
         return query.list();
     }
 

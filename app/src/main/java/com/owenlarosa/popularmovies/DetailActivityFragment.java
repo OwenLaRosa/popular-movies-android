@@ -24,7 +24,9 @@ import com.owenlarosa.popularmovies.db.DaoSession;
 import com.owenlarosa.popularmovies.db.Movie;
 import com.owenlarosa.popularmovies.db.MovieDao;
 import com.owenlarosa.popularmovies.db.Review;
+import com.owenlarosa.popularmovies.db.ReviewDao;
 import com.owenlarosa.popularmovies.db.Trailer;
+import com.owenlarosa.popularmovies.db.TrailerDao;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -61,6 +63,8 @@ public class DetailActivityFragment extends Fragment {
 
     private Movie movie;
     private MovieDao movieDao;
+    private TrailerDao trailerDao;
+    private ReviewDao reviewDao;
 
     private ArrayList<Trailer> displayedTrailers = new ArrayList<Trailer>();
     private ArrayList<Review> displayedReviews = new ArrayList<Review>();
@@ -120,19 +124,6 @@ public class DetailActivityFragment extends Fragment {
         client = new TMDBClient(getContext());
         requestQueue = Volley.newRequestQueue(getActivity());
 
-        if (savedInstanceState == null || !savedInstanceState.containsKey(TRAILERS_KEY)) {
-            getTrailers();
-        } else {
-            displayedTrailers = (ArrayList<Trailer>) savedInstanceState.getSerializable(TRAILERS_KEY);
-            displayTrailers(displayedTrailers);
-        }
-        if (savedInstanceState == null || !savedInstanceState.containsKey(REVIEWS_KEY)) {
-            getReviews();
-        } else {
-            displayedReviews = (ArrayList<Review>) savedInstanceState.getSerializable(REVIEWS_KEY);
-            displayReviews(displayedReviews);
-        }
-
         // get access to database
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity(), "movies-db", null);
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -140,6 +131,33 @@ public class DetailActivityFragment extends Fragment {
 
         DaoSession daoSession = daoMaster.newSession();
         movieDao = daoSession.getMovieDao();
+        trailerDao = daoSession.getTrailerDao();
+        reviewDao = daoSession.getReviewDao();
+
+        boolean isFavorite = isFavorite(movie);
+
+        if (savedInstanceState == null || !savedInstanceState.containsKey(TRAILERS_KEY)) {
+            if (isFavorite) {
+                displayTrailers(new ArrayList<Trailer>(movie.getTrailers()));
+            } else {
+                getTrailers();
+            }
+        } else {
+            displayedTrailers = (ArrayList<Trailer>) savedInstanceState.getSerializable(TRAILERS_KEY);
+            displayTrailers(displayedTrailers);
+        }
+        if (savedInstanceState == null || !savedInstanceState.containsKey(REVIEWS_KEY)) {
+            if (isFavorite) {
+                displayReviews(new ArrayList<Review>(movie.getReviews()));
+            } else {
+                getReviews();
+            }
+        } else {
+            displayedReviews = (ArrayList<Review>) savedInstanceState.getSerializable(REVIEWS_KEY);
+            displayReviews(displayedReviews);
+        }
+
+
 
         // determine whether the favorite button should add or remove
         if (isFavorite(movie)) {
@@ -160,6 +178,18 @@ public class DetailActivityFragment extends Fragment {
     @OnClick(R.id.mark_favorite_button) void favoriteButtonTapped() {
         if (markFavoriteButton.getText() == ADD_FAVORITE) {
             movieDao.insert(movie);
+            for (int i = 0; i < displayedTrailers.size(); i++) {
+                Trailer trailer = displayedTrailers.get(i);
+                trailer.setMovieId(movie.getId());
+                trailerDao.insert(trailer);
+                movie.getTrailers().add(trailer);
+            }
+            for (int i = 0; i < displayedReviews.size(); i++) {
+                Review review = displayedReviews.get(i);
+                review.setMovieId(movie.getId());
+                reviewDao.insert(review);
+                movie.getReviews().add(review);
+            }
             markFavoriteButton.setText(REMOVE_FAVORITE);
         } else {
             movieDao.delete(movie);

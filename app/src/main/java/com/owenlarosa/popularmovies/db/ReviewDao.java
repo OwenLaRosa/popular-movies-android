@@ -29,7 +29,7 @@ public class ReviewDao extends AbstractDao<Review, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Author = new Property(1, String.class, "author", false, "AUTHOR");
         public final static Property Content = new Property(2, String.class, "content", false, "CONTENT");
-        public final static Property ReviewId = new Property(3, long.class, "reviewId", false, "REVIEW_ID");
+        public final static Property MovieId = new Property(3, long.class, "movieId", false, "MOVIE_ID");
     };
 
     private Query<Review> movie_ReviewsQuery;
@@ -46,10 +46,10 @@ public class ReviewDao extends AbstractDao<Review, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"REVIEW\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"AUTHOR\" TEXT," + // 1: author
                 "\"CONTENT\" TEXT," + // 2: content
-                "\"REVIEW_ID\" INTEGER NOT NULL );"); // 3: reviewId
+                "\"MOVIE_ID\" INTEGER NOT NULL );"); // 3: movieId
     }
 
     /** Drops the underlying database table. */
@@ -77,6 +77,7 @@ public class ReviewDao extends AbstractDao<Review, Long> {
         if (content != null) {
             stmt.bindString(3, content);
         }
+        stmt.bindLong(4, entity.getMovieId());
     }
 
     /** @inheritdoc */
@@ -91,7 +92,8 @@ public class ReviewDao extends AbstractDao<Review, Long> {
         Review entity = new Review( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // author
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2) // content
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // content
+            cursor.getLong(offset + 3) // movieId
         );
         return entity;
     }
@@ -102,6 +104,7 @@ public class ReviewDao extends AbstractDao<Review, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setAuthor(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setContent(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setMovieId(cursor.getLong(offset + 3));
      }
     
     /** @inheritdoc */
@@ -128,16 +131,16 @@ public class ReviewDao extends AbstractDao<Review, Long> {
     }
     
     /** Internal query to resolve the "reviews" to-many relationship of Movie. */
-    public List<Review> _queryMovie_Reviews(long reviewId) {
+    public List<Review> _queryMovie_Reviews(long movieId) {
         synchronized (this) {
             if (movie_ReviewsQuery == null) {
                 QueryBuilder<Review> queryBuilder = queryBuilder();
-                queryBuilder.where(Properties.ReviewId.eq(null));
+                queryBuilder.where(Properties.MovieId.eq(null));
                 movie_ReviewsQuery = queryBuilder.build();
             }
         }
         Query<Review> query = movie_ReviewsQuery.forCurrentThread();
-        query.setParameter(0, reviewId);
+        query.setParameter(0, movieId);
         return query.list();
     }
 

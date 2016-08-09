@@ -15,6 +15,7 @@ public class Review implements Serializable {
     private Long id;
     private String author;
     private String content;
+    private long movieId;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -26,10 +27,11 @@ public class Review implements Serializable {
         this.id = id;
     }
 
-    public Review(Long id, String author, String content) {
+    public Review(Long id, String author, String content, long movieId) {
         this.id = id;
         this.author = author;
         this.content = content;
+        this.movieId = movieId;
     }
 
     public Long getId() {
@@ -54,6 +56,14 @@ public class Review implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(long movieId) {
+        this.movieId = movieId;
     }
 
     // KEEP METHODS - put your custom methods here

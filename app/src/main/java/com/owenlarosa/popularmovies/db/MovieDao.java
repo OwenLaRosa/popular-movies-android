@@ -30,8 +30,6 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         public final static Property ReleaseDate = new Property(4, String.class, "releaseDate", false, "RELEASE_DATE");
         public final static Property Rating = new Property(5, Double.class, "rating", false, "RATING");
         public final static Property Overview = new Property(6, String.class, "overview", false, "OVERVIEW");
-        public final static Property ReviewId = new Property(7, long.class, "reviewId", false, "REVIEW_ID");
-        public final static Property TrailerId = new Property(8, long.class, "trailerId", false, "TRAILER_ID");
     };
 
     private DaoSession daoSession;
@@ -50,15 +48,13 @@ public class MovieDao extends AbstractDao<Movie, Long> {
     public static void createTable(SQLiteDatabase db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"MOVIE\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"IDENTIFIER\" INTEGER," + // 1: identifier
                 "\"TITLE\" TEXT," + // 2: title
                 "\"POSTER_PATH\" TEXT," + // 3: posterPath
                 "\"RELEASE_DATE\" TEXT," + // 4: releaseDate
                 "\"RATING\" REAL," + // 5: rating
-                "\"OVERVIEW\" TEXT," + // 6: overview
-                "\"REVIEW_ID\" INTEGER NOT NULL ," + // 7: reviewId
-                "\"TRAILER_ID\" INTEGER NOT NULL );"); // 8: trailerId
+                "\"OVERVIEW\" TEXT);"); // 6: overview
     }
 
     /** Drops the underlying database table. */
@@ -106,8 +102,6 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         if (overview != null) {
             stmt.bindString(7, overview);
         }
-        stmt.bindLong(8, entity.getReviewId());
-        stmt.bindLong(9, entity.getTrailerId());
     }
 
     @Override
@@ -132,9 +126,7 @@ public class MovieDao extends AbstractDao<Movie, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // posterPath
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // releaseDate
             cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5), // rating
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // overview
-            cursor.getLong(offset + 7), // reviewId
-            cursor.getLong(offset + 8) // trailerId
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // overview
         );
         return entity;
     }
@@ -149,8 +141,6 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         entity.setReleaseDate(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setRating(cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5));
         entity.setOverview(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setReviewId(cursor.getLong(offset + 7));
-        entity.setTrailerId(cursor.getLong(offset + 8));
      }
     
     /** @inheritdoc */

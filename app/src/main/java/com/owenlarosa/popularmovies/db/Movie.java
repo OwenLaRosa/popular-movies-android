@@ -21,8 +21,6 @@ public class Movie implements Serializable {
     private String releaseDate;
     private Double rating;
     private String overview;
-    private long reviewId;
-    private long trailerId;
 
     /** Used to resolve relations */
     private transient DaoSession daoSession;
@@ -46,7 +44,7 @@ public class Movie implements Serializable {
         this.id = id;
     }
 
-    public Movie(Long id, Integer identifier, String title, String posterPath, String releaseDate, Double rating, String overview, long reviewId, long trailerId) {
+    public Movie(Long id, Integer identifier, String title, String posterPath, String releaseDate, Double rating, String overview) {
         this.id = id;
         this.identifier = identifier;
         this.title = title;
@@ -54,8 +52,6 @@ public class Movie implements Serializable {
         this.releaseDate = releaseDate;
         this.rating = rating;
         this.overview = overview;
-        this.reviewId = reviewId;
-        this.trailerId = trailerId;
     }
 
     /** called by internal mechanisms, do not call yourself. */
@@ -118,22 +114,6 @@ public class Movie implements Serializable {
 
     public void setOverview(String overview) {
         this.overview = overview;
-    }
-
-    public long getReviewId() {
-        return reviewId;
-    }
-
-    public void setReviewId(long reviewId) {
-        this.reviewId = reviewId;
-    }
-
-    public long getTrailerId() {
-        return trailerId;
-    }
-
-    public void setTrailerId(long trailerId) {
-        this.trailerId = trailerId;
     }
 
     /** To-many relationship, resolved on first access (and after reset). Changes to to-many relations are not persisted, make changes to the target entity. */

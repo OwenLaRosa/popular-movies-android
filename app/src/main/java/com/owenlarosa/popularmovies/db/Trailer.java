@@ -16,6 +16,7 @@ public class Trailer implements Serializable {
     private String identifier;
     private String key;
     private String name;
+    private long movieId;
 
     // KEEP FIELDS - put your custom fields here
     // KEEP FIELDS END
@@ -27,11 +28,12 @@ public class Trailer implements Serializable {
         this.id = id;
     }
 
-    public Trailer(Long id, String identifier, String key, String name) {
+    public Trailer(Long id, String identifier, String key, String name, long movieId) {
         this.id = id;
         this.identifier = identifier;
         this.key = key;
         this.name = name;
+        this.movieId = movieId;
     }
 
     public Long getId() {
@@ -64,6 +66,14 @@ public class Trailer implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public long getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(long movieId) {
+        this.movieId = movieId;
     }
 
     // KEEP METHODS - put your custom methods here

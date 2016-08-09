@@ -1,5 +1,6 @@
 package com.owenlarosa.popularmovies;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -12,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,7 +20,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.owenlarosa.popularmovies.db.DaoMaster;
+import com.owenlarosa.popularmovies.db.DaoSession;
 import com.owenlarosa.popularmovies.db.Movie;
+import com.owenlarosa.popularmovies.db.MovieDao;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -28,6 +31,7 @@ import java.util.LinkedHashMap;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -44,6 +48,8 @@ public class MovieActivityFragment extends Fragment {
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.left_drawer) ListView drawerList;
     @BindView(R.id.gridview) GridView gridView;
+
+    MovieDao movieDao;
 
     private Unbinder unbinder;
 
@@ -141,6 +147,14 @@ public class MovieActivityFragment extends Fragment {
             mMovieImageAdapter.movies = (ArrayList<Movie>) savedInstanceState.getSerializable(MOVIES_KEY);
         }
 
+        // get access to database
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity(), "movies-db", null);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+
+        DaoSession daoSession = daoMaster.newSession();
+        movieDao = daoSession.getMovieDao();
+
         return rootView;
     }
 
@@ -153,7 +167,11 @@ public class MovieActivityFragment extends Fragment {
     private void updateMovieList(String category) {
         if (category == "Favorites") {
             // TODO: show favorite movies
-            Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
+            QueryBuilder qb = movieDao.queryBuilder();
+            ArrayList<Movie> favorites = new ArrayList<Movie>(qb.list());
+            mMovieImageAdapter.setMovies(favorites);
+
             return;
         }
 

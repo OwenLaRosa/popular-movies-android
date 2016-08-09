@@ -4,10 +4,13 @@ package com.owenlarosa.popularmovies.db;
 
 // KEEP INCLUDES - put your custom includes here
 // KEEP INCLUDES END
+
+import java.io.Serializable;
+
 /**
  * Entity mapped to table "REVIEW".
  */
-public class Review {
+public class Review implements Serializable {
 
     private Long id;
     private String author;

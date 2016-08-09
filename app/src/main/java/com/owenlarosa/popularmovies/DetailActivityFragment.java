@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -27,11 +28,13 @@ import com.owenlarosa.popularmovies.db.Trailer;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -40,6 +43,8 @@ public class DetailActivityFragment extends Fragment {
 
     private static final String TRAILERS_KEY = "trailers";
     private static final String REVIEWS_KEY = "reviews";
+    private static final String ADD_FAVORITE = "mark as favorite";
+    private static final String REMOVE_FAVORITE = "remove favorite";
 
     @BindView(R.id.title_text_view) TextView titleTextView;
     @BindView(R.id.poster_image_view) ImageView posterImageView;
@@ -47,6 +52,7 @@ public class DetailActivityFragment extends Fragment {
     @BindView(R.id.rating_text_view) TextView ratingTextView;
     @BindView(R.id.review_linear_layout) LinearLayout reviewLinearLayout;
     @BindView(R.id.trailer_linear_layout) LinearLayout trailerLinearLayout;
+    @BindView(R.id.mark_favorite_button) Button markFavoriteButton;
 
     TMDBClient client;
     RequestQueue requestQueue;
@@ -135,6 +141,13 @@ public class DetailActivityFragment extends Fragment {
         DaoSession daoSession = daoMaster.newSession();
         movieDao = daoSession.getMovieDao();
 
+        // determine whether the favorite button should add or remove
+        if (isFavorite(movie)) {
+            markFavoriteButton.setText(REMOVE_FAVORITE);
+        } else {
+            markFavoriteButton.setText(ADD_FAVORITE);
+        }
+
         return rootView;
     }
 
@@ -145,8 +158,13 @@ public class DetailActivityFragment extends Fragment {
     }
 
     @OnClick(R.id.mark_favorite_button) void favoriteButtonTapped() {
-        //Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
-        movieDao.insert(movie);
+        if (markFavoriteButton.getText() == ADD_FAVORITE) {
+            movieDao.insert(movie);
+            markFavoriteButton.setText(REMOVE_FAVORITE);
+        } else {
+            movieDao.delete(movie);
+            markFavoriteButton.setText(ADD_FAVORITE);
+        }
     }
 
     private void getTrailers() {
@@ -213,6 +231,18 @@ public class DetailActivityFragment extends Fragment {
             reviewView.setContent(review.getContent());
             reviewLinearLayout.addView(reviewView);
         }
+    }
+
+    /**
+     * Determine whether or not the movie is marked as a favorite
+     * @param movie The movie to check
+     * @return True if the movie is in the database, otherwise false
+     */
+    private boolean isFavorite(Movie movie) {
+        QueryBuilder qb = movieDao.queryBuilder();
+        qb.where(MovieDao.Properties.Identifier.eq(movie.getIdentifier()));
+        List results = qb.list();
+        return results.size() > 0;
     }
 
 }

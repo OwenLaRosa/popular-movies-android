@@ -1,6 +1,7 @@
 package com.owenlarosa.popularmovies;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -18,7 +18,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.owenlarosa.popularmovies.db.DaoMaster;
+import com.owenlarosa.popularmovies.db.DaoSession;
 import com.owenlarosa.popularmovies.db.Movie;
+import com.owenlarosa.popularmovies.db.MovieDao;
 import com.owenlarosa.popularmovies.db.Review;
 import com.owenlarosa.popularmovies.db.Trailer;
 import com.squareup.picasso.Picasso;
@@ -51,6 +54,7 @@ public class DetailActivityFragment extends Fragment {
     private Unbinder unbinder;
 
     private Movie movie;
+    private MovieDao movieDao;
 
     private ArrayList<Trailer> displayedTrailers = new ArrayList<Trailer>();
     private ArrayList<Review> displayedReviews = new ArrayList<Review>();
@@ -123,6 +127,14 @@ public class DetailActivityFragment extends Fragment {
             displayReviews(displayedReviews);
         }
 
+        // get access to database
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity(), "movies-db", null);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+
+        DaoSession daoSession = daoMaster.newSession();
+        movieDao = daoSession.getMovieDao();
+
         return rootView;
     }
 
@@ -133,7 +145,8 @@ public class DetailActivityFragment extends Fragment {
     }
 
     @OnClick(R.id.mark_favorite_button) void favoriteButtonTapped() {
-        Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
+        movieDao.insert(movie);
     }
 
     private void getTrailers() {

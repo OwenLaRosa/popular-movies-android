@@ -85,14 +85,34 @@ public class DetailActivityFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         unbinder = ButterKnife.bind(this, rootView);
 
+        // get access to database
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity(), "movies-db", null);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+
+        DaoSession daoSession = daoMaster.newSession();
+        movieDao = daoSession.getMovieDao();
+        trailerDao = daoSession.getTrailerDao();
+        reviewDao = daoSession.getReviewDao();
+
         if (getActivity().getIntent() != null) {
             Intent intent = getActivity().getIntent();
             movie = (Movie) intent.getSerializableExtra(Movie.class.getSimpleName());
+            // find out if the movie exists in the database
+            Movie existingMovie = movieForIdentifier(movie.getIdentifier());
+            if (existingMovie != null) {
+                // if so, use that movie instead, so we can access its id
+                movie = existingMovie;
+            }
         }
 
         Bundle arguments = getArguments();
         if (arguments != null) {
             movie = (Movie) arguments.getSerializable(Movie.class.getSimpleName());
+            Movie existingMovie = movieForIdentifier(movie.getIdentifier());
+            if (existingMovie != null) {
+                movie = existingMovie;
+            }
         }
 
         titleTextView.setText(movie.getTitle());
@@ -123,16 +143,6 @@ public class DetailActivityFragment extends Fragment {
 
         client = new TMDBClient(getContext());
         requestQueue = Volley.newRequestQueue(getActivity());
-
-        // get access to database
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity(), "movies-db", null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(db);
-
-        DaoSession daoSession = daoMaster.newSession();
-        movieDao = daoSession.getMovieDao();
-        trailerDao = daoSession.getTrailerDao();
-        reviewDao = daoSession.getReviewDao();
 
         boolean isFavorite = isFavorite(movie);
 
@@ -273,6 +283,17 @@ public class DetailActivityFragment extends Fragment {
         qb.where(MovieDao.Properties.Identifier.eq(movie.getIdentifier()));
         List results = qb.list();
         return results.size() > 0;
+    }
+
+    private Movie movieForIdentifier(int identifier) {
+        QueryBuilder qb = movieDao.queryBuilder();
+        qb.where(MovieDao.Properties.Identifier.eq(identifier));
+        List results = qb.list();
+        if (results.size() > 0) {
+            return (Movie) results.get(0);
+        } else {
+            return null;
+        }
     }
 
 }

@@ -184,6 +184,15 @@ public class DetailActivityFragment extends Fragment {
             markFavoriteButton.setText(REMOVE_FAVORITE);
         } else {
             movieDao.delete(movie);
+            // when deleting a movie, also delete associated trailers and reviews
+            for (int i = 0; i < movie.getTrailers().size(); i++) {
+                Trailer trailer = movie.getTrailers().get(i);
+                trailerDao.delete(trailer);
+            }
+            for (int i = 0; i < movie.getReviews().size(); i++) {
+                Review review = movie.getReviews().get(i);
+                reviewDao.delete(review);
+            }
             markFavoriteButton.setText(ADD_FAVORITE);
         }
     }

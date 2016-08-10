@@ -43,8 +43,6 @@ import de.greenrobot.dao.query.QueryBuilder;
  */
 public class DetailActivityFragment extends Fragment {
 
-    private static final String TRAILERS_KEY = "trailers";
-    private static final String REVIEWS_KEY = "reviews";
     private static final String ADD_FAVORITE = "mark as favorite";
     private static final String REMOVE_FAVORITE = "remove favorite";
 
@@ -75,8 +73,6 @@ public class DetailActivityFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(TRAILERS_KEY, displayedTrailers);
-        outState.putSerializable(REVIEWS_KEY, displayedReviews);
     }
 
     @Override
@@ -146,28 +142,13 @@ public class DetailActivityFragment extends Fragment {
 
         boolean isFavorite = isFavorite(movie);
 
-        if (savedInstanceState == null || !savedInstanceState.containsKey(TRAILERS_KEY)) {
-            if (isFavorite) {
-                displayTrailers(new ArrayList<Trailer>(movie.getTrailers()));
-            } else {
-                getTrailers();
-            }
+        if (isFavorite) {
+            displayTrailers(new ArrayList<Trailer>(movie.getTrailers()));
+            displayReviews(new ArrayList<Review>(movie.getReviews()));
         } else {
-            displayedTrailers = (ArrayList<Trailer>) savedInstanceState.getSerializable(TRAILERS_KEY);
-            displayTrailers(displayedTrailers);
+            getTrailers();
+            getReviews();
         }
-        if (savedInstanceState == null || !savedInstanceState.containsKey(REVIEWS_KEY)) {
-            if (isFavorite) {
-                displayReviews(new ArrayList<Review>(movie.getReviews()));
-            } else {
-                getReviews();
-            }
-        } else {
-            displayedReviews = (ArrayList<Review>) savedInstanceState.getSerializable(REVIEWS_KEY);
-            displayReviews(displayedReviews);
-        }
-
-
 
         // determine whether the favorite button should add or remove
         if (isFavorite(movie)) {

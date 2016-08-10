@@ -53,6 +53,8 @@ public class DetailActivityFragment extends Fragment {
     @BindView(R.id.review_linear_layout) LinearLayout reviewLinearLayout;
     @BindView(R.id.trailer_linear_layout) LinearLayout trailerLinearLayout;
     @BindView(R.id.mark_favorite_button) Button markFavoriteButton;
+    @BindView(R.id.no_videos_text_view) TextView noVideosTextView;
+    @BindView(R.id.no_reviews_text_view) TextView noReviewsTextView;
 
     TMDBClient client;
     RequestQueue requestQueue;
@@ -203,6 +205,11 @@ public class DetailActivityFragment extends Fragment {
             @Override
             public void onResponse(String response) {
                 Trailer[] trailers = client.getTrailersFromJSON(response);
+                // display message if no trailers are available
+                if (trailers.length == 0) {
+                    noVideosTextView.setVisibility(View.VISIBLE);
+                    return;
+                }
                 for (int i = 0; i < trailers.length; i++) {
                     Trailer trailer = trailers[i];
                     displayedTrailers.add(i, trailer);
@@ -226,7 +233,10 @@ public class DetailActivityFragment extends Fragment {
             public void onResponse(String response) {
                 Review[] reviews = client.getReviewsFromJSON(response);
                 Log.d("", String.format("Number of reviews: %d", reviews.length));
-                //movie.getReviews().clear();
+                if (reviews.length == 0) {
+                    noReviewsTextView.setVisibility(View.VISIBLE);
+                    return;
+                }
                 for (int i = 0; i < reviews.length; i++) {
                     Review review = reviews[i];
                     displayedReviews.add(review);

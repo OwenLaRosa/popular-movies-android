@@ -75,7 +75,7 @@
             android:id="@+id/trailer_header_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trailers"
+            android:text="@string/header_videos"
             android:textSize="25sp"
             android:textStyle="bold"
             android:layout_below="@id/overview_text_view"
@@ -95,6 +95,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/no_videos_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:textAppearance="?android:textAppearanceMedium"
+                    android:text="@string/text_no_videos"/>
+
             </LinearLayout>
 
             <!-- Trailers will go inside, change height to wrap content -->
@@ -105,7 +113,7 @@
             android:id="@+id/review_header_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reviews"
+            android:text="@string/header_reviews"
             android:textSize="25sp"
             android:textStyle="bold"
             android:layout_below="@id/trailer_scroll_view"
@@ -119,6 +127,14 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/review_header_text_view"
             android:layout_margin="16dp">
+
+            <TextView
+                android:id="@+id/no_reviews_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:text="@string/text_no_reviews"/>
 
         </LinearLayout>
 

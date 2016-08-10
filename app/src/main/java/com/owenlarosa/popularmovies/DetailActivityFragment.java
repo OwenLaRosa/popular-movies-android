@@ -285,6 +285,11 @@ public class DetailActivityFragment extends Fragment {
         return results.size() > 0;
     }
 
+    /**
+     * Get movie from the database with the given identifier
+     * @param identifier Movie's TMDB identifier
+     * @return Movie with corresponding identifer or null if it doesn't exist
+     */
     private Movie movieForIdentifier(int identifier) {
         QueryBuilder qb = movieDao.queryBuilder();
         qb.where(MovieDao.Properties.Identifier.eq(identifier));

@@ -98,6 +98,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
+                <ProgressBar
+                    android:id="@+id/videos_progress_bar"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:indeterminate="true"/>
+
                 <TextView
                     android:id="@+id/no_videos_text_view"
                     android:layout_width="match_parent"
@@ -132,6 +138,12 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp">
+
+            <ProgressBar
+                android:id="@+id/reviews_progress_bar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:indeterminate="true"/>
 
             <TextView
                 android:id="@+id/no_reviews_text_view"

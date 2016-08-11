@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -55,6 +56,8 @@ public class DetailActivityFragment extends Fragment {
     @BindView(R.id.mark_favorite_button) Button markFavoriteButton;
     @BindView(R.id.no_videos_text_view) TextView noVideosTextView;
     @BindView(R.id.no_reviews_text_view) TextView noReviewsTextView;
+    @BindView(R.id.videos_progress_bar) ProgressBar videosProgressBar;
+    @BindView(R.id.reviews_progress_bar) ProgressBar reviewsProgressBar;
 
     TMDBClient client;
     RequestQueue requestQueue;
@@ -204,6 +207,7 @@ public class DetailActivityFragment extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                videosProgressBar.setVisibility(View.GONE);
                 Trailer[] trailers = client.getTrailersFromJSON(response);
                 // display message if no trailers are available
                 if (trailers.length == 0) {
@@ -231,6 +235,7 @@ public class DetailActivityFragment extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                reviewsProgressBar.setVisibility(View.GONE);
                 Review[] reviews = client.getReviewsFromJSON(response);
                 Log.d("", String.format("Number of reviews: %d", reviews.length));
                 if (reviews.length == 0) {

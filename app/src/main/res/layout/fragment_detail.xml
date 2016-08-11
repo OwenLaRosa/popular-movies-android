@@ -86,7 +86,10 @@
             android:id="@+id/trailer_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_below="@id/trailer_header_text_view" >
 
             <LinearLayout
@@ -126,7 +129,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/review_header_text_view"
-            android:layout_margin="16dp">
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:id="@+id/no_reviews_text_view"

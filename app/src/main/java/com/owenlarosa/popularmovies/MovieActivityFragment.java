@@ -87,6 +87,9 @@ public class MovieActivityFragment extends Fragment {
 
     ArrayAdapter<String> drawerListAdapter;
 
+    // whether or not the grid view is showing the favorite movie list
+    private boolean showsFavorites = false;
+
     public MovieActivityFragment() {
     }
 
@@ -159,6 +162,16 @@ public class MovieActivityFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        // refresh the data if it comes from the database
+        if (showsFavorites) {
+            updateMovieList("Favorites");
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
@@ -166,13 +179,15 @@ public class MovieActivityFragment extends Fragment {
 
     private void updateMovieList(String category) {
         if (category == "Favorites") {
-            // TODO: show favorite movies
-            // Toast.makeText(getContext(), "Favorites has not been implemented!", Toast.LENGTH_SHORT).show();
+            showsFavorites = true;
+
             QueryBuilder qb = movieDao.queryBuilder();
             ArrayList<Movie> favorites = new ArrayList<Movie>(qb.list());
             mMovieImageAdapter.setMovies(favorites);
 
             return;
+        } else {
+            showsFavorites = false;
         }
 
         String url = "";

@@ -55,6 +55,8 @@ public class MovieActivityFragment extends Fragment {
 
     // key to be used when saving restoring the instance
     private static final String MOVIES_KEY = "movies";
+    // key for storing whether or not the "favorites" collection is shown
+    private static final String SHOWS_FAVORITES_KEY = "showsFavorites";
 
     private static final LinkedHashMap<String, String> movieCategories;
     static {
@@ -97,7 +99,7 @@ public class MovieActivityFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(MOVIES_KEY, mMovieImageAdapter.movies);
-        //outState.putParcelableArrayList(MOVIES_KEY, mMovieImageAdapter.movies);
+        outState.putBoolean(SHOWS_FAVORITES_KEY, showsFavorites);
     }
 
     @Override
@@ -148,6 +150,9 @@ public class MovieActivityFragment extends Fragment {
                     drawerListAdapter.getItemId(popularPosition));
         } else {
             mMovieImageAdapter.movies = (ArrayList<Movie>) savedInstanceState.getSerializable(MOVIES_KEY);
+        }
+        if (savedInstanceState != null && savedInstanceState.containsKey(SHOWS_FAVORITES_KEY)) {
+            showsFavorites = true;
         }
 
         // get access to database

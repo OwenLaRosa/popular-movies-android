@@ -150,6 +150,7 @@ public class DetailActivityFragment extends Fragment {
         isFavorite = isFavorite(movie);
 
         if (isFavorite) {
+            markFavoriteButton.setBackgroundColor(getResources().getColor(R.color.remove_favorite_color));
             // download trailers and/or reviews if missing
             if (movie.getHasVideos()) {
                 // hide progress bar if loading existing trailers
@@ -165,6 +166,7 @@ public class DetailActivityFragment extends Fragment {
                 getReviews();
             }
         } else {
+            markFavoriteButton.setBackgroundColor(getResources().getColor(R.color.accent));
             getTrailers();
             getReviews();
         }
@@ -194,6 +196,7 @@ public class DetailActivityFragment extends Fragment {
             isFavorite = false;
             addReviews(displayedReviews);
             markFavoriteButton.setText(REMOVE_FAVORITE);
+            markFavoriteButton.setBackgroundColor(getResources().getColor(R.color.remove_favorite_color));
         } else {
             isFavorite = false;
             movieDao.delete(movie);
@@ -207,6 +210,7 @@ public class DetailActivityFragment extends Fragment {
                 reviewDao.delete(review);
             }
             markFavoriteButton.setText(ADD_FAVORITE);
+            markFavoriteButton.setBackgroundColor(getResources().getColor(R.color.accent));
         }
     }
 

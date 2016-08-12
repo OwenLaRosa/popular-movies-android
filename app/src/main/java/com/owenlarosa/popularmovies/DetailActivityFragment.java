@@ -69,6 +69,8 @@ public class DetailActivityFragment extends Fragment {
     private TrailerDao trailerDao;
     private ReviewDao reviewDao;
 
+    boolean isFavorite = false;
+
     private ArrayList<Trailer> displayedTrailers = new ArrayList<Trailer>();
     private ArrayList<Review> displayedReviews = new ArrayList<Review>();
 
@@ -145,14 +147,23 @@ public class DetailActivityFragment extends Fragment {
         client = new TMDBClient(getContext());
         requestQueue = Volley.newRequestQueue(getActivity());
 
-        boolean isFavorite = isFavorite(movie);
+        isFavorite = isFavorite(movie);
 
         if (isFavorite) {
-            // load existing trailers, hide progress bar
-            videosProgressBar.setVisibility(View.GONE);
-            reviewsProgressBar.setVisibility(View.GONE);
-            displayTrailers(new ArrayList<Trailer>(movie.getTrailers()));
-            displayReviews(new ArrayList<Review>(movie.getReviews()));
+            // download trailers and/or reviews if missing
+            if (movie.getHasVideos()) {
+                // hide progress bar if loading existing trailers
+                videosProgressBar.setVisibility(View.GONE);
+                displayTrailers(new ArrayList<Trailer>(movie.getTrailers()));
+            } else {
+                getTrailers();
+            }
+            if (movie.getHasReviews()) {
+                reviewsProgressBar.setVisibility(View.GONE);
+                displayTrailers(new ArrayList<Trailer>(movie.getTrailers()));
+            } else {
+                getReviews();
+            }
         } else {
             getTrailers();
             getReviews();
@@ -177,20 +188,14 @@ public class DetailActivityFragment extends Fragment {
     @OnClick(R.id.mark_favorite_button) void favoriteButtonTapped() {
         if (markFavoriteButton.getText() == ADD_FAVORITE) {
             movieDao.insert(movie);
-            for (int i = 0; i < displayedTrailers.size(); i++) {
-                Trailer trailer = displayedTrailers.get(i);
-                trailer.setMovieId(movie.getId());
-                trailerDao.insert(trailer);
-                movie.getTrailers().add(trailer);
-            }
-            for (int i = 0; i < displayedReviews.size(); i++) {
-                Review review = displayedReviews.get(i);
-                review.setMovieId(movie.getId());
-                reviewDao.insert(review);
-                movie.getReviews().add(review);
-            }
+            // only mark as favorite when movie is in the database
+            isFavorite = true;
+            addTrailers(displayedTrailers);
+            isFavorite = false;
+            addReviews(displayedReviews);
             markFavoriteButton.setText(REMOVE_FAVORITE);
         } else {
+            isFavorite = false;
             movieDao.delete(movie);
             // when deleting a movie, also delete associated trailers and reviews
             for (int i = 0; i < movie.getTrailers().size(); i++) {
@@ -210,7 +215,7 @@ public class DetailActivityFragment extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                videosProgressBar.setVisibility(View.GONE);
+                if (videosProgressBar != null) videosProgressBar.setVisibility(View.GONE);
                 Trailer[] trailers = client.getTrailersFromJSON(response);
                 // display message if no trailers are available
                 if (trailers.length == 0) {
@@ -222,6 +227,10 @@ public class DetailActivityFragment extends Fragment {
                     displayedTrailers.add(i, trailer);
                 }
                 displayTrailers(displayedTrailers);
+                movie.setHasVideos(true);
+                if (isFavorite) {
+                    addTrailers(displayedTrailers);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -238,7 +247,7 @@ public class DetailActivityFragment extends Fragment {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                reviewsProgressBar.setVisibility(View.GONE);
+                if (reviewsProgressBar != null) reviewsProgressBar.setVisibility(View.GONE);
                 Review[] reviews = client.getReviewsFromJSON(response);
                 Log.d("", String.format("Number of reviews: %d", reviews.length));
                 if (reviews.length == 0) {
@@ -250,6 +259,10 @@ public class DetailActivityFragment extends Fragment {
                     displayedReviews.add(review);
                 }
                 displayReviews(displayedReviews);
+                movie.setHasReviews(true);
+                if (isFavorite) {
+                    addReviews(displayedReviews);
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -306,6 +319,26 @@ public class DetailActivityFragment extends Fragment {
             return (Movie) results.get(0);
         } else {
             return null;
+        }
+    }
+
+    // Helper functions to add trailers and reviews to the movie
+
+    private void addTrailers(ArrayList<Trailer> trailers) {
+        for (int i = 0; i < displayedTrailers.size(); i++) {
+            Trailer trailer = displayedTrailers.get(i);
+            trailer.setMovieId(movie.getId());
+            trailerDao.insert(trailer);
+            movie.getTrailers().add(trailer);
+        }
+    }
+
+    private void addReviews(ArrayList<Review> reviews) {
+        for (int i = 0; i < displayedReviews.size(); i++) {
+            Review review = displayedReviews.get(i);
+            review.setMovieId(movie.getId());
+            reviewDao.insert(review);
+            movie.getReviews().add(review);
         }
     }
 

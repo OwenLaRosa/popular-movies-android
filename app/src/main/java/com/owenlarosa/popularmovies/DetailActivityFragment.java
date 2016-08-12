@@ -160,7 +160,7 @@ public class DetailActivityFragment extends Fragment {
             }
             if (movie.getHasReviews()) {
                 reviewsProgressBar.setVisibility(View.GONE);
-                displayTrailers(new ArrayList<Trailer>(movie.getTrailers()));
+                displayReviews(new ArrayList<Review>(displayedReviews));
             } else {
                 getReviews();
             }
@@ -274,6 +274,7 @@ public class DetailActivityFragment extends Fragment {
     }
 
     private void displayTrailers(ArrayList<Trailer> trailers) {
+        if (trailers.size() == 0) noVideosTextView.setVisibility(View.VISIBLE);
         for (int i = 0; i < trailers.size(); i++) {
             Trailer trailer = trailers.get(i);
             TrailerView trailerView = new TrailerView(getContext());
@@ -284,6 +285,7 @@ public class DetailActivityFragment extends Fragment {
     }
 
     private void displayReviews(ArrayList<Review> reviews) {
+        if (reviews.size() == 0) noReviewsTextView.setVisibility(View.VISIBLE);
         for (int i = 0; i < reviews.size(); i++) {
             Review review = reviews.get(i);
             ReviewView reviewView = new ReviewView(getContext());

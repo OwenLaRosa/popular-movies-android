@@ -111,6 +111,8 @@ public class TMDBClient {
                 movie.setReleaseDate(movieData.getString(KEY_RELEASE_DATE));
                 movie.setRating(movieData.getDouble(KEY_RATING));
                 movie.setOverview(movieData.getString(KEY_OVERVIEW));
+                movie.setHasVideos(false);
+                movie.setHasReviews(false);
                 movies[i] = movie;
             }
         } catch (JSONException e) {

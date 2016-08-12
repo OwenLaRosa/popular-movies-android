@@ -30,6 +30,8 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         public final static Property ReleaseDate = new Property(4, String.class, "releaseDate", false, "RELEASE_DATE");
         public final static Property Rating = new Property(5, Double.class, "rating", false, "RATING");
         public final static Property Overview = new Property(6, String.class, "overview", false, "OVERVIEW");
+        public final static Property HasVideos = new Property(7, Boolean.class, "hasVideos", false, "HAS_VIDEOS");
+        public final static Property HasReviews = new Property(8, Boolean.class, "hasReviews", false, "HAS_REVIEWS");
     };
 
     private DaoSession daoSession;
@@ -54,7 +56,9 @@ public class MovieDao extends AbstractDao<Movie, Long> {
                 "\"POSTER_PATH\" TEXT," + // 3: posterPath
                 "\"RELEASE_DATE\" TEXT," + // 4: releaseDate
                 "\"RATING\" REAL," + // 5: rating
-                "\"OVERVIEW\" TEXT);"); // 6: overview
+                "\"OVERVIEW\" TEXT," + // 6: overview
+                "\"HAS_VIDEOS\" INTEGER," + // 7: hasVideos
+                "\"HAS_REVIEWS\" INTEGER);"); // 8: hasReviews
     }
 
     /** Drops the underlying database table. */
@@ -102,6 +106,16 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         if (overview != null) {
             stmt.bindString(7, overview);
         }
+ 
+        Boolean hasVideos = entity.getHasVideos();
+        if (hasVideos != null) {
+            stmt.bindLong(8, hasVideos ? 1L: 0L);
+        }
+ 
+        Boolean hasReviews = entity.getHasReviews();
+        if (hasReviews != null) {
+            stmt.bindLong(9, hasReviews ? 1L: 0L);
+        }
     }
 
     @Override
@@ -126,7 +140,9 @@ public class MovieDao extends AbstractDao<Movie, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // posterPath
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // releaseDate
             cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5), // rating
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // overview
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // overview
+            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // hasVideos
+            cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0 // hasReviews
         );
         return entity;
     }
@@ -141,6 +157,8 @@ public class MovieDao extends AbstractDao<Movie, Long> {
         entity.setReleaseDate(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setRating(cursor.isNull(offset + 5) ? null : cursor.getDouble(offset + 5));
         entity.setOverview(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setHasVideos(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
+        entity.setHasReviews(cursor.isNull(offset + 8) ? null : cursor.getShort(offset + 8) != 0);
      }
     
     /** @inheritdoc */

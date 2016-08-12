@@ -21,6 +21,10 @@ public class DatabaseGenerator {
         movie.addStringProperty("releaseDate");
         movie.addDoubleProperty("rating");
         movie.addStringProperty("overview");
+        // these properties can be true even if the movie's relationships are empty
+        // they only mean that the request has been made
+        movie.addBooleanProperty("hasVideos");
+        movie.addBooleanProperty("hasReviews");
 
         Entity review = schema.addEntity("Review");
         review.addIdProperty().autoincrement();

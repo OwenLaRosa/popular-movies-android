@@ -1,6 +1,5 @@
 package com.owenlarosa.popularmovies;
 
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -98,24 +97,17 @@ public class DetailActivityFragment extends Fragment {
         trailerDao = daoSession.getTrailerDao();
         reviewDao = daoSession.getReviewDao();
 
-        if (getActivity().getIntent() != null) {
-            Intent intent = getActivity().getIntent();
-            movie = (Movie) intent.getSerializableExtra(Movie.class.getSimpleName());
-            // find out if the movie exists in the database
-            Movie existingMovie = movieForIdentifier(movie.getIdentifier());
-            if (existingMovie != null) {
-                // if so, use that movie instead, so we can access its id
-                movie = existingMovie;
-            }
+        if (getArguments() != null) {
+            // two pane
+            movie = (Movie) getArguments().getSerializable(Movie.class.getSimpleName());
+        } else if (getActivity().getIntent() != null) {
+            // single pane
+            movie = (Movie) getActivity().getIntent().getSerializableExtra(Movie.class.getSimpleName());
         }
-
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            movie = (Movie) arguments.getSerializable(Movie.class.getSimpleName());
-            Movie existingMovie = movieForIdentifier(movie.getIdentifier());
-            if (existingMovie != null) {
-                movie = existingMovie;
-            }
+        // movie already saved, get it from the database
+        Movie existingMovie = movieForIdentifier(movie.getIdentifier());
+        if (existingMovie != null) {
+            movie = existingMovie;
         }
 
         titleTextView.setText(movie.getTitle());

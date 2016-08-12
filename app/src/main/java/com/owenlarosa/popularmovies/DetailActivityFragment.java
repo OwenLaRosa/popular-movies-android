@@ -148,6 +148,9 @@ public class DetailActivityFragment extends Fragment {
         boolean isFavorite = isFavorite(movie);
 
         if (isFavorite) {
+            // load existing trailers, hide progress bar
+            videosProgressBar.setVisibility(View.GONE);
+            reviewsProgressBar.setVisibility(View.GONE);
             displayTrailers(new ArrayList<Trailer>(movie.getTrailers()));
             displayReviews(new ArrayList<Review>(movie.getReviews()));
         } else {

@@ -153,7 +153,7 @@ public class DetailActivityFragment extends Fragment {
             }
             if (movie.getHasReviews()) {
                 reviewsProgressBar.setVisibility(View.GONE);
-                displayReviews(new ArrayList<Review>(displayedReviews));
+                displayReviews(new ArrayList<Review>(movie.getReviews()));
             } else {
                 getReviews();
             }
@@ -185,7 +185,6 @@ public class DetailActivityFragment extends Fragment {
             // only mark as favorite when movie is in the database
             isFavorite = true;
             addTrailers(displayedTrailers);
-            isFavorite = false;
             addReviews(displayedReviews);
             markFavoriteButton.setText(REMOVE_FAVORITE);
             markFavoriteButton.setBackgroundColor(getResources().getColor(R.color.remove_favorite_color));

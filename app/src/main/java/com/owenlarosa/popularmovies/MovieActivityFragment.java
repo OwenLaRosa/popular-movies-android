@@ -62,7 +62,7 @@ public class MovieActivityFragment extends Fragment {
     static {
         // use static initializer as Java has no dictionary literals
         movieCategories = new LinkedHashMap<String, String>();
-        movieCategories.put("Favorites", ""); // no data needed for API call
+        movieCategories.put("★ Favorites", ""); // no data needed for API call
         movieCategories.put("Popular", "movie/popular");
         movieCategories.put("Top Rated", "movie/top_rated");
         movieCategories.put("Action", "28");
@@ -174,7 +174,7 @@ public class MovieActivityFragment extends Fragment {
 
         // refresh the data if it comes from the database
         if (showsFavorites) {
-            updateMovieList("Favorites");
+            updateMovieList("★ Favorites");
         }
     }
 
@@ -185,7 +185,7 @@ public class MovieActivityFragment extends Fragment {
     }
 
     private void updateMovieList(String category) {
-        if (category == "Favorites") {
+        if (category == "★ Favorites") {
             showsFavorites = true;
 
             QueryBuilder qb = movieDao.queryBuilder();

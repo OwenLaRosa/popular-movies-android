@@ -20,10 +20,11 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:textAppearanceMedium" />
 
-    <Button
+    <ImageButton
         android:id="@+id/review_expand_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="EXPAND" />
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@null" />
 
 </LinearLayout>

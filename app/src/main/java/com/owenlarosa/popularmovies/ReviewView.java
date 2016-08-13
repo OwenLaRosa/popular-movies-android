@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -30,7 +30,9 @@ public class ReviewView extends LinearLayout {
      * WARNING: Do not set the text of this view directly. Use the setContent() method instead.
      */
     @BindView(R.id.review_content_textview) TextView contentTextView;
-    @BindView(R.id.review_expand_button) Button expandReviewButton;
+    @BindView(R.id.review_expand_button) ImageButton expandReviewButton;
+
+    boolean expanded = false;
 
     /**
      * The number of lines of text to be displayed when text is collapsed.
@@ -62,7 +64,7 @@ public class ReviewView extends LinearLayout {
 
         unbinder = ButterKnife.bind(this, rootView);
 
-        expandReviewButton.setText("EXPAND");
+        expandReviewButton.setImageResource(R.drawable.chevron_down);
     }
 
     /**
@@ -93,14 +95,16 @@ public class ReviewView extends LinearLayout {
 
     @OnClick(R.id.review_expand_button)
     public void toggleExpandedState(View view) {
-        if (expandReviewButton.getText() == "EXPAND") {
+        if (!expanded) {
             // max_value will allow the text field to expand infinitely, as needed
             contentTextView.setMaxLines(Integer.MAX_VALUE);
-            expandReviewButton.setText("COLLAPSE");
+            expandReviewButton.setImageResource(R.drawable.chevron_up);
+            expanded = true;
         } else {
             // 4 is the default maximum number of lines of text
             contentTextView.setMaxLines(numLines);
-            expandReviewButton.setText("EXPAND");
+            expandReviewButton.setImageResource(R.drawable.chevron_down);
+            expanded = false;
         }
     }
 

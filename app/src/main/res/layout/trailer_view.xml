@@ -13,10 +13,14 @@
         android:scaleType="center"
         android:background="@color/thumbnail_placeholder" />
 
-    <Button
+    <ImageButton
         android:id="@+id/trailer_play_button"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/play_button_selector"
+        android:background="@null"
+        android:alpha="0.8"
+        android:scaleType="centerCrop"
         android:layout_gravity="center" />
 
     <TextView

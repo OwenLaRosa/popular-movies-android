@@ -152,7 +152,9 @@ public class MovieActivityFragment extends Fragment {
             mMovieImageAdapter.movies = (ArrayList<Movie>) savedInstanceState.getSerializable(MOVIES_KEY);
         }
         if (savedInstanceState != null && savedInstanceState.containsKey(SHOWS_FAVORITES_KEY)) {
-            showsFavorites = true;
+            if (savedInstanceState.getBoolean(SHOWS_FAVORITES_KEY)) {
+                showsFavorites = true;
+            }
         }
 
         // get access to database

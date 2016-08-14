@@ -1,6 +1,8 @@
 package com.owenlarosa.popularmovies;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +33,9 @@ public class ReviewView extends LinearLayout {
      */
     @BindView(R.id.review_content_textview) TextView contentTextView;
     @BindView(R.id.review_expand_button) ImageButton expandReviewButton;
+
+    private static final String SUPER_STATE_KEY = "superState";
+    private static final String EXPANDED_KEY = "expanded";
 
     boolean expanded = false;
 
@@ -106,6 +111,30 @@ public class ReviewView extends LinearLayout {
             expandReviewButton.setImageResource(R.drawable.chevron_down);
             expanded = false;
         }
+    }
+
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(SUPER_STATE_KEY, super.onSaveInstanceState());
+        bundle.putBoolean(EXPANDED_KEY, expanded);
+        return bundle;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        super.onRestoreInstanceState(state);
+        expanded = ((Bundle) state).getBoolean(EXPANDED_KEY);
+        contentTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                if (contentTextView.getLineCount() > numLines) {
+                    // only relevant if the total lines exceeds the line count
+                    // state will still be saved when screen returns to smaller width
+                    toggleExpandedState(null);
+                }
+            }
+        });
     }
 
 }

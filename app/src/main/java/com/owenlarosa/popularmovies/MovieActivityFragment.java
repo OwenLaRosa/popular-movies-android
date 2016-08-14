@@ -48,6 +48,7 @@ public class MovieActivityFragment extends Fragment {
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.left_drawer) ListView drawerList;
     @BindView(R.id.gridview) GridView gridView;
+    @BindView(R.id.no_favorites_text_view) TextView noFavoritesTextView;
 
     MovieDao movieDao;
 
@@ -190,11 +191,15 @@ public class MovieActivityFragment extends Fragment {
 
             QueryBuilder qb = movieDao.queryBuilder();
             ArrayList<Movie> favorites = new ArrayList<Movie>(qb.list());
+            if (favorites.size() == 0) {
+                noFavoritesTextView.setVisibility(View.VISIBLE);
+            }
             mMovieImageAdapter.setMovies(favorites);
 
             return;
         } else {
             showsFavorites = false;
+            noFavoritesTextView.setVisibility(View.GONE);
         }
 
         String url = "";

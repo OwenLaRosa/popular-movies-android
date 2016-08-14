@@ -46,6 +46,9 @@ public class DetailActivityFragment extends Fragment {
     private static final String ADD_FAVORITE = "mark as favorite";
     private static final String REMOVE_FAVORITE = "remove favorite";
 
+    private static final String TRAILERS_KEY = "trailers";
+    private static final String REVIEWS_KEY = "reviews";
+
     @BindView(R.id.title_text_view) TextView titleTextView;
     @BindView(R.id.poster_image_view) ImageView posterImageView;
     @BindView(R.id.year_text_view) TextView yearTextView;
@@ -79,6 +82,8 @@ public class DetailActivityFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putSerializable(TRAILERS_KEY, displayedTrailers);
+        outState.putSerializable(REVIEWS_KEY, displayedReviews);
     }
 
     @Override
@@ -140,28 +145,7 @@ public class DetailActivityFragment extends Fragment {
         requestQueue = Volley.newRequestQueue(getActivity());
 
         isFavorite = isFavorite(movie);
-
-        if (isFavorite) {
-            markFavoriteButton.setBackgroundColor(getResources().getColor(R.color.remove_favorite_color));
-            // download trailers and/or reviews if missing
-            if (movie.getHasVideos()) {
-                // hide progress bar if loading existing trailers
-                videosProgressBar.setVisibility(View.GONE);
-                displayTrailers(new ArrayList<Trailer>(movie.getTrailers()));
-            } else {
-                getTrailers();
-            }
-            if (movie.getHasReviews()) {
-                reviewsProgressBar.setVisibility(View.GONE);
-                displayReviews(new ArrayList<Review>(movie.getReviews()));
-            } else {
-                getReviews();
-            }
-        } else {
-            markFavoriteButton.setBackgroundColor(getResources().getColor(R.color.accent));
-            getTrailers();
-            getReviews();
-        }
+        restoreTrailersAndReviews(savedInstanceState);
 
         // determine whether the favorite button should add or remove
         if (isFavorite(movie)) {
@@ -336,6 +320,51 @@ public class DetailActivityFragment extends Fragment {
             review.setMovieId(movie.getId());
             reviewDao.insert(review);
             movie.getReviews().add(review);
+        }
+    }
+
+    private void restoreTrailersAndReviews(Bundle bundle) {
+        // first get the previously displayed videos and reviews
+        if (movie.getHasVideos()) displayedTrailers = new ArrayList<Trailer>(movie.getTrailers());
+        if (movie.getHasReviews()) displayedReviews = new ArrayList<Review>(movie.getReviews());
+        if (bundle != null) {
+            if (bundle.containsKey(TRAILERS_KEY)) {
+                displayedTrailers = (ArrayList<Trailer>) bundle.getSerializable(TRAILERS_KEY);
+            }
+            if (bundle.containsKey(REVIEWS_KEY)) {
+                displayedReviews = (ArrayList<Review>) bundle.getSerializable(REVIEWS_KEY);
+            }
+        }
+        // check if the movie is loaded from the database
+        if (isFavorite) {
+            markFavoriteButton.setBackgroundColor(getResources().getColor(R.color.remove_favorite_color));
+            // download trailers and/or reviews if missing
+            if (movie.getHasVideos()) {
+                // hide progress bar if loading existing trailers
+                videosProgressBar.setVisibility(View.GONE);
+                displayTrailers(new ArrayList<Trailer>(movie.getTrailers()));
+            } else {
+                getTrailers();
+            }
+            if (movie.getHasReviews()) {
+                reviewsProgressBar.setVisibility(View.GONE);
+                displayReviews(new ArrayList<Review>(movie.getReviews()));
+            } else {
+                getReviews();
+            }
+        } else {
+            // if it's not, see if videos and trailers are present
+            markFavoriteButton.setBackgroundColor(getResources().getColor(R.color.accent));
+            if (bundle != null) {
+                videosProgressBar.setVisibility(View.GONE);
+                reviewsProgressBar.setVisibility(View.GONE);
+                displayTrailers(displayedTrailers);
+                displayReviews(displayedReviews);
+            } else {
+                // if not, download a new set
+                getTrailers();
+                getReviews();
+            }
         }
     }
 

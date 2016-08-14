@@ -124,7 +124,8 @@ public class ReviewView extends LinearLayout {
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
         super.onRestoreInstanceState(state);
-        expanded = ((Bundle) state).getBoolean(EXPANDED_KEY);
+        // opposite is used because we're about to simulate state toggle
+        expanded = !((Bundle) state).getBoolean(EXPANDED_KEY);
         contentTextView.post(new Runnable() {
             @Override
             public void run() {

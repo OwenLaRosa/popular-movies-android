@@ -325,8 +325,10 @@ public class DetailActivityFragment extends Fragment {
 
     private void restoreTrailersAndReviews(Bundle bundle) {
         // first get the previously displayed videos and reviews
-        if (movie.getHasVideos()) displayedTrailers = new ArrayList<Trailer>(movie.getTrailers());
-        if (movie.getHasReviews()) displayedReviews = new ArrayList<Review>(movie.getReviews());
+        if (isFavorite) {
+            if (movie.getHasVideos()) displayedTrailers = new ArrayList<Trailer>(movie.getTrailers());
+            if (movie.getHasReviews()) displayedReviews = new ArrayList<Review>(movie.getReviews());
+        }
         if (bundle != null) {
             if (bundle.containsKey(TRAILERS_KEY)) {
                 displayedTrailers = (ArrayList<Trailer>) bundle.getSerializable(TRAILERS_KEY);

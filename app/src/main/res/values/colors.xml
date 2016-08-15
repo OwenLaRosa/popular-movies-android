@@ -7,6 +7,7 @@
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="accent">#00897b</color>
+    <color name="accent_dark">#00695c</color>
     <color name="thumbnail_placeholder">#bdbdbd</color>
     <color name="remove_favorite_color">#757575</color>
 

@@ -19,6 +19,8 @@ public class MovieActivity extends AppCompatActivity implements MovieActivityFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
+        getSupportActionBar().setElevation(0);
+
         if (findViewById(R.id.movie_detail_container) != null) {
             mTwoPane = true;
         } else {

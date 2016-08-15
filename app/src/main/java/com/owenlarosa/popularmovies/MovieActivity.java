@@ -54,6 +54,12 @@ public class MovieActivity extends AppCompatActivity implements MovieActivityFra
     public void onShowDetail(Movie movie) {
         if (mTwoPane) {
 
+            DetailActivityFragment oldDetail = (DetailActivityFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+            if (oldDetail != null && oldDetail.movie != null && oldDetail.movie.equals(movie)) {
+                // layout is already shown, don't replace it
+                return;
+            }
+
             Bundle args = new Bundle();
             args.putSerializable(Movie.class.getSimpleName(), movie);
 

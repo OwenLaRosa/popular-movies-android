@@ -66,7 +66,7 @@ public class DetailActivityFragment extends Fragment {
 
     private Unbinder unbinder;
 
-    private Movie movie;
+    public Movie movie;
     private MovieDao movieDao;
     private TrailerDao trailerDao;
     private ReviewDao reviewDao;

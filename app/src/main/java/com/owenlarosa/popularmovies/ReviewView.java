@@ -135,15 +135,16 @@ public class ReviewView extends LinearLayout {
 
         SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
-        // opposite is used because we're about to simulate state toggle
-        expanded = !savedState.expandedState;
+        expanded = savedState.expandedState;
 
         contentTextView.post(new Runnable() {
             @Override
             public void run() {
                 if (contentTextView.getLineCount() > numLines) {
                     // only relevant if the total lines exceeds the line count
-                    // state will still be saved when screen returns to smaller width
+                    // state will still be saved when screen returns to smaller width\
+                    // opposite is used because we're about to simulate state toggle
+                    expanded = !expanded;
                     toggleExpandedState(null);
                 }
             }

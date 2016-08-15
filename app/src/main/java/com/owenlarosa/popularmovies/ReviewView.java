@@ -34,9 +34,6 @@ public class ReviewView extends LinearLayout {
     @BindView(R.id.review_content_textview) TextView contentTextView;
     @BindView(R.id.review_expand_button) ImageButton expandReviewButton;
 
-    private static final String SUPER_STATE_KEY = "superState";
-    private static final String EXPANDED_KEY = "expanded";
-
     boolean expanded = false;
 
     /**

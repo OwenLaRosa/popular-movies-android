@@ -268,6 +268,7 @@ public class DetailActivityFragment extends Fragment {
         for (int i = 0; i < reviews.size(); i++) {
             Review review = reviews.get(i);
             ReviewView reviewView = new ReviewView(getContext());
+            reviewView.setId(i);
             reviewView.authorTextView.setText(review.getAuthor());
             // ReviewView requires setting the content with this method instead
             reviewView.setContent(review.getContent());

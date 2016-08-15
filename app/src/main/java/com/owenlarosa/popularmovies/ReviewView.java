@@ -1,7 +1,7 @@
 package com.owenlarosa.popularmovies;
 
 import android.content.Context;
-import android.os.Bundle;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -70,6 +70,10 @@ public class ReviewView extends LinearLayout {
         unbinder = ButterKnife.bind(this, rootView);
 
         expandReviewButton.setImageResource(R.drawable.chevron_down);
+
+        authorTextView.generateViewId();
+        contentTextView.generateViewId();
+        expandReviewButton.getNextFocusRightId();
     }
 
     /**
@@ -115,17 +119,25 @@ public class ReviewView extends LinearLayout {
 
     @Override
     protected Parcelable onSaveInstanceState() {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(SUPER_STATE_KEY, super.onSaveInstanceState());
-        bundle.putBoolean(EXPANDED_KEY, expanded);
-        return bundle;
+
+        Parcelable superState = super.onSaveInstanceState();
+        SavedState savedState = new SavedState(superState);
+        savedState.expandedState = expanded;
+        return savedState;
     }
 
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
-        super.onRestoreInstanceState(state);
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
+        SavedState savedState = (SavedState) state;
+        super.onRestoreInstanceState(savedState.getSuperState());
         // opposite is used because we're about to simulate state toggle
-        expanded = !((Bundle) state).getBoolean(EXPANDED_KEY);
+        expanded = !savedState.expandedState;
+
         contentTextView.post(new Runnable() {
             @Override
             public void run() {
@@ -136,6 +148,37 @@ public class ReviewView extends LinearLayout {
                 }
             }
         });
+    }
+
+    static class SavedState extends BaseSavedState {
+
+        boolean expandedState = false;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+            this.expandedState = in.readByte() == 1;
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeByte((byte) (expandedState ? 1 : 0));
+        }
+
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(Parcel source) {
+                return new SavedState(source);
+            }
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 
 }

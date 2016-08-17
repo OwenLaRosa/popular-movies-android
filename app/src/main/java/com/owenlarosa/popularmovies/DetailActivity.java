@@ -1,5 +1,6 @@
 package com.owenlarosa.popularmovies;
 
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         getSupportActionBar().setElevation(0);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -33,6 +35,11 @@ public class DetailActivity extends AppCompatActivity {
         /*if (id == R.id.action_settings) {
             return true;
         }*/
+
+        if (id == R.id.home) {
+            NavUtils.navigateUpFromSameTask(this);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

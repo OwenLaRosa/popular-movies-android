@@ -133,15 +133,10 @@ public class MovieActivityFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // TODO: display the detail view.
-                // for now, just display a toast
-                //Toast.makeText(getContext(), "This will launch the detail view.", Toast.LENGTH_SHORT);
-
+                // display the detail view.
                 Movie movie = (Movie) mMovieImageAdapter.getItem(position);
                 ((Callback) getActivity()).onShowDetail(movie);
-                //Intent detailIntent = new Intent(getActivity(), DetailActivity.class)
-                //        .putExtra(Movie.class.getSimpleName(), movie);
-                //startActivity(detailIntent);
+                gridView.setSelection(0);
             }
         });
         if (savedInstanceState == null || !savedInstanceState.containsKey(MOVIES_KEY)) {

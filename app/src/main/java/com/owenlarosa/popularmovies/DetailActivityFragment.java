@@ -146,7 +146,7 @@ public class DetailActivityFragment extends Fragment {
         overviewTextView.setText(movie.getOverview());
 
         // set the title
-        getActivity().setTitle("Movie Details");
+        getActivity().setTitle(R.string.app_name);
 
         client = new TMDBClient(getContext());
         requestQueue = Volley.newRequestQueue(getActivity());

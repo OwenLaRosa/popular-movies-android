@@ -148,6 +148,9 @@ public class ReviewView extends LinearLayout {
         });
     }
 
+    // Custom saved state inner class
+    // referenced from: http://stackoverflow.com/questions/3542333/how-to-prevent-custom-views-from-losing-state-across-screen-orientation-changes/3542895#3542895
+
     static class SavedState extends BaseSavedState {
 
         boolean expandedState = false;

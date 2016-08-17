@@ -1,10 +1,12 @@
 package com.owenlarosa.popularmovies;
 
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -12,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -42,6 +45,8 @@ import de.greenrobot.dao.query.QueryBuilder;
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment {
+
+    private static final String SHARE_HASHTAG = "#PopularMoviesApp";
 
     private static final String ADD_FAVORITE = "mark as favorite";
     private static final String REMOVE_FAVORITE = "remove favorite";
@@ -91,6 +96,8 @@ public class DetailActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
         unbinder = ButterKnife.bind(this, rootView);
+
+        setHasOptionsMenu(true);
 
         // get access to database
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity(), "movies-db", null);
@@ -161,6 +168,31 @@ public class DetailActivityFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_share) {
+            if (displayedTrailers.size() > 0) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                intent.setType("text/plain");
+                String shareString = new StringBuilder()
+                        .append("https://www.youtube.com/watch?v=")
+                        .append(displayedTrailers.get(0).getKey())
+                        .append(" ")
+                        .append(SHARE_HASHTAG).toString();
+                intent.putExtra(Intent.EXTRA_TEXT, shareString);
+                startActivity(intent);
+            } else {
+                Toast toast = Toast.makeText(getContext(), getString(R.string.no_videos_to_share), Toast.LENGTH_SHORT);
+                toast.show();
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @OnClick(R.id.mark_favorite_button) void favoriteButtonTapped() {

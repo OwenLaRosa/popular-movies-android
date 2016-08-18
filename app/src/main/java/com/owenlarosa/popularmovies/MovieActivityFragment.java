@@ -157,19 +157,20 @@ public class MovieActivityFragment extends Fragment {
             }
         });
 
-        // load the last shown category from the preferences
-        // if first launch, select Popular category
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        int position = sharedPreferences.getInt(CATEGORY_INDEX_PREF_KEY, 1);
-        drawerList.performItemClick(drawerListAdapter.getView(position, null, null),
-                position,
-                drawerListAdapter.getItemId(position));
-
         if (savedInstanceState != null && savedInstanceState.containsKey(SHOWS_FAVORITES_KEY)) {
             if (savedInstanceState.getBoolean(SHOWS_FAVORITES_KEY)) {
                 showsFavorites = true;
             }
         }
+
+        // load the last shown category from the preferences
+        // if first launch, select Popular category
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        int position = sharedPreferences.getInt(CATEGORY_INDEX_PREF_KEY, 1);
+        if (position != 0) showsFavorites = false;
+        drawerList.performItemClick(drawerListAdapter.getView(position, null, null),
+                position,
+                drawerListAdapter.getItemId(position));
 
         return rootView;
     }
@@ -191,6 +192,7 @@ public class MovieActivityFragment extends Fragment {
     }
 
     private void updateMovieList(String category) {
+        noFavoritesTextView.setVisibility(View.GONE);
         if (category == "★ Favorites") {
             showsFavorites = true;
 
@@ -204,7 +206,6 @@ public class MovieActivityFragment extends Fragment {
             return;
         } else {
             showsFavorites = false;
-            noFavoritesTextView.setVisibility(View.GONE);
         }
 
         String url = "";

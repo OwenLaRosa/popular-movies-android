@@ -1,7 +1,9 @@
 package com.owenlarosa.popularmovies;
 
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -59,6 +61,9 @@ public class MovieActivityFragment extends Fragment {
     // key for storing whether or not the "favorites" collection is shown
     private static final String SHOWS_FAVORITES_KEY = "showsFavorites";
 
+    // keys to be used with SharedPreferences
+    private static final String CATEGORY_INDEX_PREF_KEY = "index";
+
     private static final LinkedHashMap<String, String> movieCategories;
     static {
         // use static initializer as Java has no dictionary literals
@@ -111,6 +116,14 @@ public class MovieActivityFragment extends Fragment {
 
         client = new TMDBClient(getContext());
 
+        // get access to database
+        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity(), "movies-db", null);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        DaoMaster daoMaster = new DaoMaster(db);
+
+        DaoSession daoSession = daoMaster.newSession();
+        movieDao = daoSession.getMovieDao();
+
         drawerListAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 R.layout.drawer_list_item,
@@ -126,6 +139,10 @@ public class MovieActivityFragment extends Fragment {
                 // dismiss the drawer: http://stackoverflow.com/questions/26833741/hide-navigation-drawer-when-user-presses-back-button
                 drawerLayout.closeDrawer(GravityCompat.START);
                 gridView.setSelection(0);
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt(CATEGORY_INDEX_PREF_KEY, position);
+                editor.commit();
             }
         });
 
@@ -139,27 +156,20 @@ public class MovieActivityFragment extends Fragment {
                 ((Callback) getActivity()).onShowDetail(movie);
             }
         });
-        if (savedInstanceState == null || !savedInstanceState.containsKey(MOVIES_KEY)) {
-            int popularPosition = 1;
-            drawerList.performItemClick(drawerListAdapter.getView(popularPosition, null, null),
-                    popularPosition,
-                    drawerListAdapter.getItemId(popularPosition));
-        } else {
-            mMovieImageAdapter.movies = (ArrayList<Movie>) savedInstanceState.getSerializable(MOVIES_KEY);
-        }
+
+        // load the last shown category from the preferences
+        // if first launch, select Popular category
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        int position = sharedPreferences.getInt(CATEGORY_INDEX_PREF_KEY, 1);
+        drawerList.performItemClick(drawerListAdapter.getView(position, null, null),
+                position,
+                drawerListAdapter.getItemId(position));
+
         if (savedInstanceState != null && savedInstanceState.containsKey(SHOWS_FAVORITES_KEY)) {
             if (savedInstanceState.getBoolean(SHOWS_FAVORITES_KEY)) {
                 showsFavorites = true;
             }
         }
-
-        // get access to database
-        DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(getActivity(), "movies-db", null);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        DaoMaster daoMaster = new DaoMaster(db);
-
-        DaoSession daoSession = daoMaster.newSession();
-        movieDao = daoSession.getMovieDao();
 
         return rootView;
     }

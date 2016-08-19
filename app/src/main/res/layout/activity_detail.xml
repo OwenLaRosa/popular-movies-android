@@ -1,4 +1,4 @@
-<FrameLayout android:id="@+id/movie_detail_container"
+<FrameLayout android:id="@+id/detail_fragment_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:name="com.owenlarosa.popularmovies.DetailActivityFragment"

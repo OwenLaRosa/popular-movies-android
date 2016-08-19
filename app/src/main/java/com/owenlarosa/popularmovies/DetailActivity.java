@@ -28,7 +28,7 @@ public class DetailActivity extends AppCompatActivity {
             args.putSerializable(Movie.class.getSimpleName(), movie);
             fragment.setArguments(args);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
+                    .replace(R.id.detail_fragment_container, fragment, DETAILFRAGMENT_TAG)
                     .commit();
         }
     }

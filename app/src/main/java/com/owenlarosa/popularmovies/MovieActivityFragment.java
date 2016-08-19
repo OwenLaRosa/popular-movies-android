@@ -231,10 +231,13 @@ public class MovieActivityFragment extends Fragment {
     }
 
     public void loadFavorites() {
+
         QueryBuilder qb = movieDao.queryBuilder();
         ArrayList<Movie> favorites = new ArrayList<Movie>(qb.list());
         if (favorites.size() == 0) {
             noFavoritesTextView.setVisibility(View.VISIBLE);
+        } else {
+            noFavoritesTextView.setVisibility(View.GONE);
         }
         mMovieImageAdapter.setMovies(favorites);
     }

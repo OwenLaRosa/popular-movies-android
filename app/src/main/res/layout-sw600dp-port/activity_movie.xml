@@ -10,15 +10,23 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:name="com.owenlarosa.popularmovies.MovieActivityFragment"
-        tools:layout="@layout/fragment_movie"/>
+        tools:layout="@layout/fragment_movie" />
+
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:alpha="0.5"
+        android:layout_gravity="center"
+        android:visibility="visible"/>
 
     <FrameLayout
         android:id="@+id/movie_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="64dp"
-        android:background="@color/white"
-        android:layout_gravity="center"
-        android:visibility="visible" />
+        android:alpha="1.0"
+        android:background="@color/white"/>
 
 </FrameLayout>

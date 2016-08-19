@@ -130,6 +130,9 @@ public class MovieActivity extends AppCompatActivity implements MovieActivityFra
         movieDetailContainer.setVisibility(state);
         dismissDetailButton.setVisibility(state);
         overlay.setVisibility(state);
+        if (!flag) {
+            getSupportFragmentManager().
+        }
     }
 
     @Override

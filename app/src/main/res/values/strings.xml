@@ -10,4 +10,5 @@
     <string name="text_no_reviews">There are no reviews for this movie.</string>
     <string name="no_favorites">No favorites yet.\n\nYou can add favorites from a movie\'s detail page.</string>
     <string name="no_videos_to_share">No videos to share.</string>
+    <string name="no_details">No movie selected.\n\nSelect a movie to view details.</string>
 </resources>

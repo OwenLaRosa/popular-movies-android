@@ -96,7 +96,7 @@ public class MovieActivityFragment extends Fragment {
     ArrayAdapter<String> drawerListAdapter;
 
     // whether or not the grid view is showing the favorite movie list
-    private boolean showsFavorites = false;
+    public boolean showsFavorites = false;
 
     public MovieActivityFragment() {
     }
@@ -195,14 +195,7 @@ public class MovieActivityFragment extends Fragment {
         noFavoritesTextView.setVisibility(View.GONE);
         if (category == "★ Favorites") {
             showsFavorites = true;
-
-            QueryBuilder qb = movieDao.queryBuilder();
-            ArrayList<Movie> favorites = new ArrayList<Movie>(qb.list());
-            if (favorites.size() == 0) {
-                noFavoritesTextView.setVisibility(View.VISIBLE);
-            }
-            mMovieImageAdapter.setMovies(favorites);
-
+            loadFavorites();
             return;
         } else {
             showsFavorites = false;
@@ -235,6 +228,15 @@ public class MovieActivityFragment extends Fragment {
             }
         });
         requestQueue.add(stringRequest);
+    }
+
+    public void loadFavorites() {
+        QueryBuilder qb = movieDao.queryBuilder();
+        ArrayList<Movie> favorites = new ArrayList<Movie>(qb.list());
+        if (favorites.size() == 0) {
+            noFavoritesTextView.setVisibility(View.VISIBLE);
+        }
+        mMovieImageAdapter.setMovies(favorites);
     }
 
 }

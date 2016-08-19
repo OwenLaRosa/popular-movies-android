@@ -18,7 +18,7 @@ import butterknife.Unbinder;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class MovieActivity extends AppCompatActivity implements MovieActivityFragment.Callback {
+public class MovieActivity extends AppCompatActivity implements MovieActivityFragment.Callback, FavoritesDelegate {
 
     private boolean mTwoPane;
 
@@ -132,4 +132,13 @@ public class MovieActivity extends AppCompatActivity implements MovieActivityFra
         overlay.setVisibility(state);
     }
 
+    @Override
+    public void favoritesDidChange() {
+        if (mTwoPane) {
+            MovieActivityFragment fragment = (MovieActivityFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_movies);
+            if (fragment.showsFavorites) {
+                fragment.loadFavorites();
+            }
+        }
+    }
 }

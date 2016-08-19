@@ -215,6 +215,9 @@ public class DetailActivityFragment extends Fragment {
             markFavoriteButton.setText(ADD_FAVORITE);
             markFavoriteButton.setBackgroundColor(getResources().getColor(R.color.accent));
         }
+        // let the activity know that the favorites list has been updated
+        FavoritesDelegate favoritesDelegate = (FavoritesDelegate) getActivity();
+        favoritesDelegate.favoritesDidChange();
     }
 
     private void getTrailers() {

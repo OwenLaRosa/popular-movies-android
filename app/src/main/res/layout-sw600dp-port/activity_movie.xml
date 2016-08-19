@@ -19,7 +19,7 @@
         android:background="@color/black"
         android:alpha="0.5"
         android:layout_gravity="center"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 
     <FrameLayout
         android:id="@+id/movie_detail_container"
@@ -27,6 +27,16 @@
         android:layout_height="match_parent"
         android:layout_margin="64dp"
         android:alpha="1.0"
-        android:background="@color/white"/>
+        android:background="@color/white"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/dismiss_detail_button"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="top|right"
+        android:layout_margin="32dp"
+        android:layout_marginRight="32dp"
+        android:visibility="gone"/>
 
 </FrameLayout>

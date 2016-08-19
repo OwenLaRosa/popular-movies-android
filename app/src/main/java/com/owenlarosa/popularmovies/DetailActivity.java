@@ -24,7 +24,9 @@ public class DetailActivity extends AppCompatActivity {
         Movie movie = (Movie) intent.getSerializableExtra(Movie.class.getSimpleName());
         if (movie != null) {
             DetailActivityFragment fragment = new DetailActivityFragment();
-            fragment.movie = movie;
+            Bundle args = new Bundle();
+            args.putSerializable(Movie.class.getSimpleName(), movie);
+            fragment.setArguments(args);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
                     .commit();

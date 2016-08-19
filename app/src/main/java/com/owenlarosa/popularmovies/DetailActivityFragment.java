@@ -110,9 +110,8 @@ public class DetailActivityFragment extends Fragment {
         reviewDao = daoSession.getReviewDao();
 
         if (getArguments() != null) {
-            // two pane
             movie = (Movie) getArguments().getSerializable(Movie.class.getSimpleName());
-        } // single pane should already be assigned
+        }
         // movie already saved, get it from the database
         Movie existingMovie = movieForIdentifier(movie.getIdentifier());
         if (existingMovie != null) {

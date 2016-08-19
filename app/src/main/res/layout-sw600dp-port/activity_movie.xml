@@ -8,7 +8,17 @@
         android:id="@+id/fragment_movies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:name="com.owenlarosa.popularmovies.MovieActivityFragment"
         tools:layout="@layout/fragment_movie"/>
+
+    <FrameLayout
+        android:id="@+id/movie_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="64dp"
+        android:background="@color/white"
+        android:layout_gravity="center"
+        android:visibility="visible" />
 
 </FrameLayout>

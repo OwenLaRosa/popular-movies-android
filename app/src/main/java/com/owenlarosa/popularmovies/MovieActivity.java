@@ -2,6 +2,7 @@ package com.owenlarosa.popularmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -130,6 +131,19 @@ public class MovieActivity extends AppCompatActivity implements MovieActivityFra
         movieDetailContainer.setVisibility(state);
         dismissDetailButton.setVisibility(state);
         overlay.setVisibility(state);
+        if (flag) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.movie_detail_container, fragment, DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        } else {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+            getSupportFragmentManager().beginTransaction()
+                    .remove(fragment)
+                    .commit();
+        }
     }
 
     @Override

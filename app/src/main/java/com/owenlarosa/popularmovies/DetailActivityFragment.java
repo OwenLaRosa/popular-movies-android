@@ -158,9 +158,7 @@ public class DetailActivityFragment extends Fragment {
         } else {
             markFavoriteButton.setText(ADD_FAVORITE);
         }
-
-        setRetainInstance(true);
-
+        
         return rootView;
     }
 

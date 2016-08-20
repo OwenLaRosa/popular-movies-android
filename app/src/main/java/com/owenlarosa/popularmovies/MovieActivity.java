@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
@@ -131,6 +132,18 @@ public class MovieActivity extends AppCompatActivity implements MovieActivityFra
         movieDetailContainer.setVisibility(state);
         dismissDetailButton.setVisibility(state);
         overlay.setVisibility(state);
+        AlphaAnimation viewFade = new AlphaAnimation(0.0f, 1.0f);
+        AlphaAnimation overlayFade = new AlphaAnimation(0.0f, 0.5f);
+        if (!flag) {
+            // reverse the animation if hiding
+            viewFade = new AlphaAnimation(1.0f, 0.0f);
+            overlayFade = new AlphaAnimation(0.5f, 0.0f);
+        }
+        viewFade.setDuration(150);
+        overlayFade.setDuration(75);
+        movieDetailContainer.startAnimation(viewFade);
+        dismissDetailButton.startAnimation(viewFade);
+        overlay.startAnimation(overlayFade);
         if (flag) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
             if (fragment != null) {

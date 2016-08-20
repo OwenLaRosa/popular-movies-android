@@ -1,13 +1,18 @@
 package com.owenlarosa.popularmovies;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -51,6 +56,8 @@ public class MovieActivityFragment extends Fragment {
     @BindView(R.id.left_drawer) ListView drawerList;
     @BindView(R.id.gridview) GridView gridView;
     @BindView(R.id.no_favorites_text_view) TextView noFavoritesTextView;
+
+    private ActionBarDrawerToggle mDrawerToggle;
 
     MovieDao movieDao;
 
@@ -145,6 +152,23 @@ public class MovieActivityFragment extends Fragment {
                 editor.commit();
             }
         });
+        mDrawerToggle = new ActionBarDrawerToggle(
+                getActivity(),
+                drawerLayout,
+                R.drawable.menu,
+                R.string.app_name,
+                R.string.app_name) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+        };
+        drawerLayout.setDrawerListener(mDrawerToggle);
 
         mMovieImageAdapter = new MovieImageAdapter(getContext(), R.layout.movie_grid_item);
         gridView.setAdapter(mMovieImageAdapter);
@@ -172,6 +196,12 @@ public class MovieActivityFragment extends Fragment {
                 position,
                 drawerListAdapter.getItemId(position));
 
+        AppCompatActivity compatActivity = (AppCompatActivity) getActivity();
+        compatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        compatActivity.getSupportActionBar().setHomeButtonEnabled(true);
+        compatActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu);
+        setHasOptionsMenu(true);
+
         return rootView;
     }
 
@@ -189,6 +219,27 @@ public class MovieActivityFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+    }
+
+    // these two methods are required to toggle the navigation drawer
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) return true;
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     private void updateMovieList(String category) {

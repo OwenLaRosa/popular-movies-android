@@ -13,7 +13,6 @@ import android.widget.ImageButton;
 
 import com.owenlarosa.popularmovies.db.Movie;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -26,7 +25,7 @@ public class MovieActivity extends AppCompatActivity implements MovieActivityFra
 
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
     ImageButton dismissDetailButton;
-    @BindView(R.id.movie_detail_container) FrameLayout movieDetailContainer;
+    FrameLayout movieDetailContainer;
     View overlay;
     Unbinder unbinder;
 
@@ -46,9 +45,10 @@ public class MovieActivity extends AppCompatActivity implements MovieActivityFra
             shouldShowDetail = true;
         }
 
-        overlay = findViewById(R.id.overlay);
-        dismissDetailButton = (ImageButton) findViewById(R.id.dismiss_detail_button);
         if (findViewById(R.id.movie_detail_container) != null) {
+            movieDetailContainer = (FrameLayout) findViewById(R.id.movie_detail_container);
+            overlay = findViewById(R.id.overlay);
+            dismissDetailButton = (ImageButton) findViewById(R.id.dismiss_detail_button);
             if (dismissDetailButton != null) {
                 dismissDetailButton.setOnClickListener(new View.OnClickListener() {
                     @Override

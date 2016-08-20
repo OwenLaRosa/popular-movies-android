@@ -225,8 +225,10 @@ public class DetailActivityFragment extends Fragment {
             markFavoriteButton.setBackgroundColor(getResources().getColor(R.color.accent));
         }
         // let the activity know that the favorites list has been updated
-        FavoritesDelegate favoritesDelegate = (FavoritesDelegate) getActivity();
-        favoritesDelegate.favoritesDidChange();
+        if (getActivity() instanceof FavoritesDelegate) {
+            FavoritesDelegate favoritesDelegate = (FavoritesDelegate) getActivity();
+            favoritesDelegate.favoritesDidChange();
+        }
     }
 
     private void getTrailers() {

@@ -150,7 +150,7 @@ public class MovieActivityFragment extends Fragment {
                 updateMovieList(((TextView) view.findViewById(R.id.drawer_list_item_textview)).getText().toString());
                 // dismiss the drawer: http://stackoverflow.com/questions/26833741/hide-navigation-drawer-when-user-presses-back-button
                 drawerLayout.closeDrawer(GravityCompat.START);
-                //gridView.setSelection(0);
+                gridView.setSelection(0);
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt(CATEGORY_INDEX_PREF_KEY, position);

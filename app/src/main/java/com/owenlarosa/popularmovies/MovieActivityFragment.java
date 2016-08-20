@@ -67,6 +67,10 @@ public class MovieActivityFragment extends Fragment {
     private static final String MOVIES_KEY = "movies";
     // key for storing whether or not the "favorites" collection is shown
     private static final String SHOWS_FAVORITES_KEY = "showsFavorites";
+    // last position the grid view was scrolled
+    private static final String SCROLL_POSITION_KEY = "scrollPosition";
+    // used to preserve the selected position
+    static int index;
 
     // keys to be used with SharedPreferences
     private static final String CATEGORY_INDEX_PREF_KEY = "index";
@@ -113,6 +117,7 @@ public class MovieActivityFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putSerializable(MOVIES_KEY, mMovieImageAdapter.movies);
         outState.putBoolean(SHOWS_FAVORITES_KEY, showsFavorites);
+        outState.putInt(SCROLL_POSITION_KEY, gridView.getFirstVisiblePosition());
     }
 
     @Override
@@ -145,7 +150,7 @@ public class MovieActivityFragment extends Fragment {
                 updateMovieList(((TextView) view.findViewById(R.id.drawer_list_item_textview)).getText().toString());
                 // dismiss the drawer: http://stackoverflow.com/questions/26833741/hide-navigation-drawer-when-user-presses-back-button
                 drawerLayout.closeDrawer(GravityCompat.START);
-                gridView.setSelection(0);
+                //gridView.setSelection(0);
                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putInt(CATEGORY_INDEX_PREF_KEY, position);
@@ -187,14 +192,21 @@ public class MovieActivityFragment extends Fragment {
             }
         }
 
-        // load the last shown category from the preferences
-        // if first launch, select Popular category
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         int position = sharedPreferences.getInt(CATEGORY_INDEX_PREF_KEY, 1);
         if (position != 0) showsFavorites = false;
-        drawerList.performItemClick(drawerListAdapter.getView(position, null, null),
-                position,
-                drawerListAdapter.getItemId(position));
+        if (savedInstanceState != null && savedInstanceState.containsKey(MOVIES_KEY)) {
+            mMovieImageAdapter.setMovies((ArrayList<Movie>) savedInstanceState.getSerializable(MOVIES_KEY));
+        } else {
+            // load the last shown category from the preferences
+            // if first launch, select Popular category
+            drawerList.setSelection(position);
+            drawerList.performItemClick(drawerListAdapter.getView(position, null, null),
+                    position,
+                    drawerListAdapter.getItemId(position));
+        }
+
+        gridView.setSelection(index);
 
         AppCompatActivity compatActivity = (AppCompatActivity) getActivity();
         compatActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -240,6 +252,8 @@ public class MovieActivityFragment extends Fragment {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+
+        index = gridView.getFirstVisiblePosition();
     }
 
     private void updateMovieList(String category) {

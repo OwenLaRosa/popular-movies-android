@@ -1,13 +1,10 @@
 package com.owenlarosa.popularmovies;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.owenlarosa.popularmovies.db.Movie;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -19,18 +16,6 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Intent intent = getIntent();
-        Movie movie = (Movie) intent.getSerializableExtra(Movie.class.getSimpleName());
-        if (movie != null) {
-            DetailActivityFragment fragment = new DetailActivityFragment();
-            Bundle args = new Bundle();
-            args.putSerializable(Movie.class.getSimpleName(), movie);
-            fragment.setArguments(args);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.detail_fragment_container, fragment, DETAILFRAGMENT_TAG)
-                    .commit();
-        }
     }
 
 

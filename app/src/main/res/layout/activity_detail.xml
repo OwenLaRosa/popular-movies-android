@@ -1,6 +1,6 @@
-<FrameLayout android:id="@+id/detail_fragment_container"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment"
     android:name="com.owenlarosa.popularmovies.DetailActivityFragment"
     tools:layout="@layout/fragment_detail"
     android:layout_width="match_parent"
